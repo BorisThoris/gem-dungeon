@@ -21,7 +21,16 @@ export const RoomType = {
   ENEMY: 'enemy',
   PUZZLE: 'puzzle',
   BOSS: 'boss',
-  SECRET: 'secret'
+  SECRET: 'secret',
+  // Enhanced room types from React Native game
+  MEMORY_CHAMBER: 'memory-chamber',
+  SHOP: 'shop',
+  TRAP: 'trap',
+  CHALLENGE: 'challenge',
+  LIBRARY: 'library',
+  CURSED_ROOM: 'cursed-room',
+  DEVIL_ROOM: 'devil-room',
+  ANGEL_ROOM: 'angel-room'
 } as const;
 
 export type RoomType = typeof RoomType[keyof typeof RoomType];
@@ -59,4 +68,58 @@ export interface MapActions {
   markRoomVisited: (roomId: string) => void;
   clearMap: () => void;
   setError: (error: string | null) => void;
+}
+
+// Item system types
+export interface ItemEffect {
+  type: string;
+  value: number;
+  duration?: number;
+  description: string;
+}
+
+export interface Item {
+  id: string;
+  name: string;
+  description: string;
+  type: 'consumable' | 'passive' | 'active' | 'trinket';
+  rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
+  cost: number;
+  effects: ItemEffect[];
+  icon: string;
+  maxUses?: number;
+  currentUses?: number;
+  floorRequirement?: number;
+  roomTypeRequirement?: string[];
+}
+
+// Puzzle system types
+export interface PuzzleTile {
+  id: string;
+  shape: string;
+  x: number;
+  y: number;
+  state: 'hidden' | 'flipped' | 'matched' | 'mismatched' | 'preview';
+  pairId: string | null;
+}
+
+export interface Puzzle {
+  id: string;
+  type: 'memory-pairs' | 'sequence' | 'pattern' | 'color' | 'number';
+  difficulty: number;
+  tiles: PuzzleTile[];
+  gridSize: number;
+  completed: boolean;
+  timeLimit?: number;
+}
+
+// Enhanced room interface
+export interface EnhancedRoom extends Room {
+  puzzle?: Puzzle;
+  items: Item[];
+  specialProperties?: { [key: string]: any };
+  rewards: Item[];
+  isLocked?: boolean;
+  requiresKey?: boolean;
+  timeLimit?: number;
 }

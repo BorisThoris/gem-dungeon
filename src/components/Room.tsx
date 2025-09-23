@@ -1,7 +1,9 @@
 import React from "react";
 import { RigidBody } from "@react-three/rapier";
-import type { Room as RoomType } from "../types/map";
+import type { Room as RoomType, Item } from "../types/map";
 import { RoomType as RoomTypeValues } from "../types/map";
+import ItemSprite from "./ItemSprite";
+import PuzzleGrid from "./PuzzleGrid";
 
 interface RoomProps {
   room: RoomType;
@@ -34,6 +36,23 @@ const Room: React.FC<RoomProps> = ({
         return "#E91E63"; // Pink
       case RoomTypeValues.SECRET:
         return "#607D8B"; // Blue Grey
+      // Enhanced room types
+      case RoomTypeValues.MEMORY_CHAMBER:
+        return "#673AB7"; // Deep Purple
+      case RoomTypeValues.SHOP:
+        return "#4CAF50"; // Green
+      case RoomTypeValues.TRAP:
+        return "#FF5722"; // Orange
+      case RoomTypeValues.CHALLENGE:
+        return "#FF9800"; // Amber
+      case RoomTypeValues.LIBRARY:
+        return "#795548"; // Brown
+      case RoomTypeValues.CURSED_ROOM:
+        return "#9C27B0"; // Purple
+      case RoomTypeValues.DEVIL_ROOM:
+        return "#E91E63"; // Pink
+      case RoomTypeValues.ANGEL_ROOM:
+        return "#00BCD4"; // Cyan
       default:
         return "#2196F3"; // Blue
     }
@@ -311,6 +330,57 @@ const Room: React.FC<RoomProps> = ({
         <planeGeometry args={[2, 0.5]} />
         <meshLambertMaterial color="#FFFFFF" transparent opacity={0.8} />
       </mesh>
+
+      {/* Enhanced Room Features */}
+      {isCurrent && (
+        <>
+          {/* Items in room */}
+          {(room as any).items?.map((item: Item, index: number) => (
+            <ItemSprite
+              key={item.id}
+              item={item}
+              position={
+                [
+                  ((index % 3) - 1) * 2,
+                  roomHeight + 0.5,
+                  Math.floor(index / 3) * 2 - 1,
+                ] as [number, number, number]
+              }
+              scale={0.5}
+              onClick={() => {
+                console.log(`Picked up ${item.name}`);
+                // Handle item pickup
+              }}
+            />
+          ))}
+
+          {/* Puzzle in room */}
+          {(room as any).puzzle && (
+            <PuzzleGrid
+              puzzle={(room as any).puzzle}
+              onTileClick={(tile) => {
+                console.log(`Clicked tile: ${tile.id}`);
+                // Handle puzzle tile click
+              }}
+              onComplete={() => {
+                console.log("Puzzle completed!");
+                // Handle puzzle completion
+              }}
+            />
+          )}
+
+          {/* Special room effects */}
+          {(room as any).specialProperties && (
+            <group position={[0, roomHeight + 2, 0]}>
+              {/* Special room indicator */}
+              <mesh>
+                <sphereGeometry args={[0.2, 8, 8]} />
+                <meshBasicMaterial color="#FFD700" transparent opacity={0.8} />
+              </mesh>
+            </group>
+          )}
+        </>
+      )}
     </group>
   );
 };

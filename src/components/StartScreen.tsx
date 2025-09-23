@@ -10,6 +10,8 @@ import {
 import Controller from "ecctrl";
 import MapContainer from "./MapContainer";
 import MapUI from "./MapUI";
+import GameUI from "./GameUI";
+import useGameStore from "../store/gameStore";
 
 // Keyboard controls mapping
 const keyboardMap = [
@@ -67,8 +69,8 @@ const GhostScene: React.FC = () => {
           </Controller>
         </KeyboardControls>
 
-        {/* Generated Map - Auto-centered */}
-        <MapContainer centerMap={true} />
+        {/* Generated Map - Centered by algorithm */}
+        <MapContainer centerMap={false} />
 
         {/* Ground */}
         <Ground />
@@ -78,6 +80,8 @@ const GhostScene: React.FC = () => {
 };
 
 const StartScreen: React.FC = () => {
+  const { playerStats, inventory, useItem } = useGameStore();
+
   return (
     <div
       style={{
@@ -111,6 +115,14 @@ const StartScreen: React.FC = () => {
           <GhostScene />
         </Fisheye>
       </Canvas>
+
+      {/* Game UI Overlay */}
+      <GameUI
+        playerStats={playerStats}
+        inventory={inventory}
+        currentRoom="Start Room"
+        onItemUse={(item) => useItem(item.id)}
+      />
 
       {/* Map UI Overlay */}
       <MapUI />

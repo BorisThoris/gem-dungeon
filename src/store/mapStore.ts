@@ -85,7 +85,7 @@ function generateProceduralMap(config: MapConfig): GameMap {
   
   const startRoom: Room = {
     id: 'start',
-    position: { x: startX * roomSize, z: startZ * roomSize },
+    position: { x: 0, z: 0 }, // Start at world origin
     type: RoomType.START,
     connections: [],
     size: roomSize,
@@ -101,6 +101,9 @@ function generateProceduralMap(config: MapConfig): GameMap {
   
   // Ensure connectivity
   ensureConnectivity(rooms);
+  
+  // Debug: Log room positions
+  console.log('Generated rooms:', rooms.map(r => ({ id: r.id, pos: r.position, connections: r.connections.length })));
   
   // Create the map
   const map: GameMap = {
@@ -184,7 +187,7 @@ function generateCrossPattern(
         
         const newRoom: Room = {
           id: `room_${currentRoomId}`,
-          position: { x: x * roomSize, z: z * roomSize },
+          position: { x: (x - startX) * roomSize, z: (z - startZ) * roomSize },
           type: roomType,
           connections: [],
           size: roomSize,
@@ -497,7 +500,7 @@ function generatePlusPattern(
         
         const newRoom: Room = {
           id: `room_${currentRoomId}`,
-          position: { x: x * roomSize, z: z * roomSize },
+          position: { x: (x - startX) * roomSize, z: (z - startZ) * roomSize },
           type: roomType,
           connections: [],
           size: roomSize,
