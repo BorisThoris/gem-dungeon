@@ -8,6 +8,8 @@ import {
   KeyboardControls,
 } from "@react-three/drei";
 import Controller from "ecctrl";
+import MapContainer from "./MapContainer";
+import MapUI from "./MapUI";
 
 // Keyboard controls mapping
 const keyboardMap = [
@@ -65,6 +67,9 @@ const GhostScene: React.FC = () => {
           </Controller>
         </KeyboardControls>
 
+        {/* Generated Map - Auto-centered */}
+        <MapContainer centerMap={true} />
+
         {/* Ground */}
         <Ground />
       </Physics>
@@ -106,6 +111,9 @@ const StartScreen: React.FC = () => {
           <GhostScene />
         </Fisheye>
       </Canvas>
+
+      {/* Map UI Overlay */}
+      <MapUI />
     </div>
   );
 };
