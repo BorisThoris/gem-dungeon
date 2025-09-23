@@ -9,6 +9,9 @@ import ShopRoom from "./rooms/ShopRoom";
 import PuzzleRoom from "./rooms/PuzzleRoom";
 import SpecialRoom from "./rooms/SpecialRoom";
 import LibraryRoom from "./rooms/LibraryRoom";
+import RoomInteraction from "./RoomInteraction";
+import Door from "./Door";
+import DestructibleWall from "./DestructibleWall";
 
 interface RoomProps {
   room: RoomType;
@@ -16,6 +19,8 @@ interface RoomProps {
   isVisited: boolean;
   connectedRooms: RoomType[];
   onClick?: () => void;
+  playerPosition?: [number, number, number];
+  onInteraction?: (interactionType: string, roomId: string) => void;
 }
 
 const Room: React.FC<RoomProps> = ({
@@ -24,7 +29,36 @@ const Room: React.FC<RoomProps> = ({
   isVisited,
   connectedRooms,
   onClick,
+  playerPosition = [0, 0, 0],
+  onInteraction,
 }) => {
+  const getDoorPosition = (
+    _room: RoomType,
+    _connection: string,
+    index: number
+  ) => {
+    const roomSize = 8;
+    const positions = [
+      {
+        position: [roomSize / 2, 1.5, 0] as [number, number, number],
+        rotation: [0, Math.PI / 2, 0] as [number, number, number],
+      }, // Right
+      {
+        position: [-roomSize / 2, 1.5, 0] as [number, number, number],
+        rotation: [0, -Math.PI / 2, 0] as [number, number, number],
+      }, // Left
+      {
+        position: [0, 1.5, roomSize / 2] as [number, number, number],
+        rotation: [0, 0, 0] as [number, number, number],
+      }, // Front
+      {
+        position: [0, 1.5, -roomSize / 2] as [number, number, number],
+        rotation: [0, Math.PI, 0] as [number, number, number],
+      }, // Back
+    ];
+    return positions[index % positions.length];
+  };
+
   const getRoomColor = (type: string): string => {
     switch (type) {
       case RoomTypeValues.START:
@@ -487,6 +521,49 @@ const Room: React.FC<RoomProps> = ({
                 </mesh>
               </group>
             )}
+          </>
+        )}
+
+        {/* Room Interaction System */}
+        {onInteraction && (
+          <RoomInteraction
+            room={room}
+            playerPosition={playerPosition}
+            onInteraction={onInteraction}
+          />
+        )}
+
+        {/* Doors */}
+        {room.connections && room.connections.length > 0 && (
+          <>
+            {room.connections.map((connection, index) => {
+              const doorPosition = getDoorPosition(room, connection, index);
+              return (
+                <Door
+                  key={`door-${connection}`}
+                  position={doorPosition.position}
+                  rotation={doorPosition.rotation}
+                  keyRequired={Math.random() > 0.7} // 30% chance of requiring key
+                  keyId="master-key"
+                />
+              );
+            })}
+          </>
+        )}
+
+        {/* Destructible Walls */}
+        {Math.random() > 0.8 && ( // 20% chance of having destructible walls
+          <>
+            <DestructibleWall
+              position={[4, 1.5, 0]}
+              rotation={[0, Math.PI / 2, 0]}
+              bombRequired={Math.random() > 0.5}
+            />
+            <DestructibleWall
+              position={[-4, 1.5, 0]}
+              rotation={[0, -Math.PI / 2, 0]}
+              bombRequired={Math.random() > 0.5}
+            />
           </>
         )}
       </>

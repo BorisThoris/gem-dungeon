@@ -150,9 +150,9 @@ const GameManager: React.FC<GameManagerProps> = ({
 
       {/* Render enemies */}
       {enemies.map((_enemy) => (
-        <div key={_enemy.id}>
+        <group key={_enemy.id}>
           {/* Enemy rendering would be handled by the Enemy component */}
-        </div>
+        </group>
       ))}
     </group>
   );

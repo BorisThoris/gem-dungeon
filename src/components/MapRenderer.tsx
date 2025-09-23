@@ -2,6 +2,7 @@ import React from "react";
 import useMapStore from "../store/mapStore";
 import Room from "./Room";
 import ConnectionLine from "./ConnectionLine";
+import InteractionManager from "./InteractionManager";
 
 const MapRenderer: React.FC = () => {
   const { currentMap, currentRoomId, visitedRooms, generateMap } =
@@ -54,6 +55,10 @@ const MapRenderer: React.FC = () => {
             isCurrent={room.id === currentRoomId}
             isVisited={visitedRooms.has(room.id)}
             connectedRooms={connectedRooms}
+            playerPosition={[0, 0, 0]} // This would be actual player position
+            onInteraction={(interactionType, roomId) => {
+              console.log(`Interaction: ${interactionType} in room ${roomId}`);
+            }}
             onClick={() => {
               // Handle room click for navigation
               console.log(`Clicked room: ${room.id} (${room.type})`);
@@ -61,6 +66,11 @@ const MapRenderer: React.FC = () => {
           />
         );
       })}
+
+      {/* Interaction Manager */}
+      <InteractionManager
+        playerPosition={[0, 0, 0]} // This would be actual player position
+      />
     </group>
   );
 };
