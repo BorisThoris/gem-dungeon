@@ -11,6 +11,9 @@ export interface Room {
   size: number; // Room size in units
   isVisited: boolean;
   isCurrent: boolean;
+  // Enhanced room properties
+  items?: any[]; // Demo items for special rooms
+  specialProperties?: { [key: string]: any }; // Special room properties
 }
 
 export const RoomType = {

@@ -8,7 +8,7 @@ const defaultConfig: MapConfig = {
   roomSize: 10,
   minRooms: 8,
   maxRooms: 15,
-  specialRoomChance: 0.3,
+  specialRoomChance: 0.6, // Increased to see more special rooms
   connectionChance: 0.4,
 };
 
@@ -193,6 +193,9 @@ function generateCrossPattern(
           size: roomSize,
           isVisited: false,
           isCurrent: false,
+          // Add demo items for special rooms
+          items: getDemoItemsForRoomType(roomType),
+          specialProperties: getSpecialPropertiesForRoomType(roomType),
         };
         
         rooms.push(newRoom);
@@ -506,6 +509,9 @@ function generatePlusPattern(
           size: roomSize,
           isVisited: false,
           isCurrent: false,
+          // Add demo items for special rooms
+          items: getDemoItemsForRoomType(roomType),
+          specialProperties: getSpecialPropertiesForRoomType(roomType),
         };
         
         rooms.push(newRoom);
@@ -526,8 +532,81 @@ function generatePlusPattern(
 
 // Helper function to get random special room
 function getRandomSpecialRoom(): string {
-  const specialTypes = [RoomType.TREASURE, RoomType.ENEMY, RoomType.PUZZLE, RoomType.SECRET];
+  const specialTypes = [
+    RoomType.TREASURE, 
+    RoomType.ENEMY, 
+    RoomType.PUZZLE, 
+    RoomType.SECRET,
+    RoomType.SHOP,
+    RoomType.LIBRARY,
+    RoomType.CHALLENGE,
+    RoomType.MEMORY_CHAMBER,
+    RoomType.CURSED_ROOM,
+    RoomType.DEVIL_ROOM,
+    RoomType.ANGEL_ROOM
+  ];
   return specialTypes[Math.floor(Math.random() * specialTypes.length)];
+}
+
+// Helper function to get demo items for room types
+function getDemoItemsForRoomType(roomType: string): any[] {
+  switch (roomType) {
+    case RoomType.TREASURE:
+      return [
+        { id: 'treasure-coin', name: 'Gold Coin', icon: '🪙', rarity: 'common' },
+        { id: 'treasure-gem', name: 'Ruby', icon: '💎', rarity: 'rare' }
+      ];
+    case RoomType.SHOP:
+      return [
+        { id: 'shop-potion', name: 'Health Potion', icon: '🧪', rarity: 'common', cost: 50 },
+        { id: 'shop-scroll', name: 'Magic Scroll', icon: '📜', rarity: 'uncommon', cost: 100 }
+      ];
+    case RoomType.LIBRARY:
+      return [
+        { id: 'book-wisdom', name: 'Book of Wisdom', icon: '📖', rarity: 'common' },
+        { id: 'book-magic', name: 'Spell Tome', icon: '📚', rarity: 'rare' }
+      ];
+    case RoomType.DEVIL_ROOM:
+      return [
+        { id: 'devil-soul', name: 'Soul Fragment', icon: '👹', rarity: 'epic' }
+      ];
+    case RoomType.ANGEL_ROOM:
+      return [
+        { id: 'angel-blessing', name: 'Divine Blessing', icon: '👼', rarity: 'legendary' }
+      ];
+    case RoomType.CURSED_ROOM:
+      return [
+        { id: 'cursed-artifact', name: 'Cursed Artifact', icon: '💀', rarity: 'epic' }
+      ];
+    case RoomType.SECRET:
+      return [
+        { id: 'secret-key', name: 'Master Key', icon: '🗝️', rarity: 'rare' }
+      ];
+    default:
+      return [];
+  }
+}
+
+// Helper function to get special properties for room types
+function getSpecialPropertiesForRoomType(roomType: string): any {
+  switch (roomType) {
+    case RoomType.TREASURE:
+      return { isOpened: false, hasChest: true };
+    case RoomType.SHOP:
+      return { hasShopkeeper: true, discount: 0.1 };
+    case RoomType.LIBRARY:
+      return { hasBooks: true, knowledgeBonus: 1.5 };
+    case RoomType.DEVIL_ROOM:
+      return { requiresSacrifice: true, highReward: true };
+    case RoomType.ANGEL_ROOM:
+      return { blessed: true, freeItems: true };
+    case RoomType.CURSED_ROOM:
+      return { cursed: true, risk: 'lose_life' };
+    case RoomType.SECRET:
+      return { hidden: true, bonusRewards: true };
+    default:
+      return {};
+  }
 }
 
 // Clean, simple BoI-style map generation

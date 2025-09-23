@@ -1,12 +1,7 @@
 import React from "react";
 import { Canvas } from "@react-three/fiber";
 import { Physics, RigidBody } from "@react-three/rapier";
-import {
-  Gltf,
-  Environment,
-  Fisheye,
-  KeyboardControls,
-} from "@react-three/drei";
+import { Gltf, Environment, KeyboardControls } from "@react-three/drei";
 import Controller from "ecctrl";
 import MapContainer from "./MapContainer";
 import MapUI from "./MapUI";
@@ -111,9 +106,7 @@ const StartScreen: React.FC = () => {
         }}
         dpr={[1, 2]}
       >
-        <Fisheye zoom={0.4}>
-          <GhostScene />
-        </Fisheye>
+        <GhostScene />
       </Canvas>
 
       {/* Game UI Overlay */}
@@ -121,7 +114,9 @@ const StartScreen: React.FC = () => {
         playerStats={playerStats}
         inventory={inventory}
         currentRoom="Start Room"
-        onItemUse={(item) => useItem(item.id)}
+        onItemUse={(item) => {
+          useItem(item.id);
+        }}
       />
 
       {/* Map UI Overlay */}

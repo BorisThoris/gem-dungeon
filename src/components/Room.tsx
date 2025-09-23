@@ -4,6 +4,11 @@ import type { Room as RoomType, Item } from "../types/map";
 import { RoomType as RoomTypeValues } from "../types/map";
 import ItemSprite from "./ItemSprite";
 import PuzzleGrid from "./PuzzleGrid";
+import TreasureRoom from "./rooms/TreasureRoom";
+import ShopRoom from "./rooms/ShopRoom";
+import PuzzleRoom from "./rooms/PuzzleRoom";
+import SpecialRoom from "./rooms/SpecialRoom";
+import LibraryRoom from "./rooms/LibraryRoom";
 
 interface RoomProps {
   room: RoomType;
@@ -331,56 +336,160 @@ const Room: React.FC<RoomProps> = ({
         <meshLambertMaterial color="#FFFFFF" transparent opacity={0.8} />
       </mesh>
 
-      {/* Enhanced Room Features */}
-      {isCurrent && (
-        <>
-          {/* Items in room */}
-          {(room as any).items?.map((item: Item, index: number) => (
-            <ItemSprite
-              key={item.id}
-              item={item}
-              position={
-                [
-                  ((index % 3) - 1) * 2,
-                  roomHeight + 0.5,
-                  Math.floor(index / 3) * 2 - 1,
-                ] as [number, number, number]
-              }
-              scale={0.5}
-              onClick={() => {
-                console.log(`Picked up ${item.name}`);
-                // Handle item pickup
-              }}
-            />
-          ))}
+      {/* Simple visual indicator for special rooms */}
+      {room.type !== RoomTypeValues.NORMAL &&
+        room.type !== RoomTypeValues.START &&
+        room.type !== RoomTypeValues.END && (
+          <mesh position={[0, 2, 0]}>
+            <boxGeometry args={[1, 1, 1]} />
+            <meshBasicMaterial color={roomColor} />
+          </mesh>
+        )}
 
-          {/* Puzzle in room */}
-          {(room as any).puzzle && (
-            <PuzzleGrid
-              puzzle={(room as any).puzzle}
-              onTileClick={(tile) => {
-                console.log(`Clicked tile: ${tile.id}`);
-                // Handle puzzle tile click
-              }}
-              onComplete={() => {
-                console.log("Puzzle completed!");
-                // Handle puzzle completion
-              }}
-            />
-          )}
+      {/* Enhanced Room Features - Always render all specialized rooms */}
+      <>
+        {/* Specialized Room Types */}
+        {room.type === RoomTypeValues.TREASURE && (
+          <TreasureRoom
+            items={(room as any).items || []}
+            onItemPickup={(item) => {
+              console.log(`Picked up treasure: ${item.name}`);
+              // Handle treasure pickup
+            }}
+            isOpened={(room as any).isOpened || false}
+            onOpen={() => {
+              console.log("Opened treasure chest!");
+              // Handle chest opening
+            }}
+          />
+        )}
 
-          {/* Special room effects */}
-          {(room as any).specialProperties && (
-            <group position={[0, roomHeight + 2, 0]}>
-              {/* Special room indicator */}
-              <mesh>
-                <sphereGeometry args={[0.2, 8, 8]} />
-                <meshBasicMaterial color="#FFD700" transparent opacity={0.8} />
-              </mesh>
-            </group>
-          )}
-        </>
-      )}
+        {room.type === RoomTypeValues.SHOP && (
+          <ShopRoom
+            items={(room as any).items || []}
+            onItemPurchase={(item) => {
+              console.log(`Purchased: ${item.name} for ${item.cost} points`);
+              // Handle item purchase
+            }}
+            playerPoints={100} // Get from game store
+          />
+        )}
+
+        {room.type === RoomTypeValues.PUZZLE && (room as any).puzzle && (
+          <PuzzleRoom
+            puzzle={(room as any).puzzle}
+            onPuzzleComplete={() => {
+              console.log("Puzzle completed!");
+              // Handle puzzle completion
+            }}
+            onTileClick={(tile) => {
+              console.log(`Clicked tile: ${tile.id}`);
+              // Handle puzzle tile click
+            }}
+            reward={(room as any).reward}
+            onRewardClaim={(item) => {
+              console.log(`Claimed reward: ${item.name}`);
+              // Handle reward claim
+            }}
+          />
+        )}
+
+        {(room.type === RoomTypeValues.DEVIL_ROOM ||
+          room.type === RoomTypeValues.ANGEL_ROOM ||
+          room.type === RoomTypeValues.CURSED_ROOM ||
+          room.type === RoomTypeValues.SECRET) && (
+          <SpecialRoom
+            roomType={room.type as any}
+            items={(room as any).items || []}
+            onItemInteraction={(item) => {
+              console.log(`Interacted with special item: ${item.name}`);
+              // Handle special item interaction
+            }}
+            onRoomEnter={() => {
+              console.log(`Entered ${room.type}`);
+              // Handle special room entry
+            }}
+          />
+        )}
+
+        {room.type === RoomTypeValues.LIBRARY && (
+          <LibraryRoom
+            books={(room as any).books || []}
+            onBookRead={(book) => {
+              console.log(`Read book: ${book.name}`);
+              // Handle book reading
+            }}
+            onKnowledgeGain={(amount) => {
+              console.log(`Gained ${amount} knowledge`);
+              // Handle knowledge gain
+            }}
+          />
+        )}
+
+        {/* Fallback for other room types */}
+        {![
+          RoomTypeValues.TREASURE,
+          RoomTypeValues.SHOP,
+          RoomTypeValues.PUZZLE,
+          RoomTypeValues.DEVIL_ROOM,
+          RoomTypeValues.ANGEL_ROOM,
+          RoomTypeValues.CURSED_ROOM,
+          RoomTypeValues.SECRET,
+          RoomTypeValues.LIBRARY,
+        ].includes(room.type as any) && (
+          <>
+            {/* Items in room */}
+            {(room as any).items?.map((item: Item, index: number) => (
+              <ItemSprite
+                key={item.id}
+                item={item}
+                position={
+                  [
+                    ((index % 3) - 1) * 2,
+                    roomHeight + 0.5,
+                    Math.floor(index / 3) * 2 - 1,
+                  ] as [number, number, number]
+                }
+                scale={0.5}
+                onClick={() => {
+                  console.log(`Picked up ${item.name}`);
+                  // Handle item pickup
+                }}
+              />
+            ))}
+
+            {/* Puzzle in room */}
+            {(room as any).puzzle && (
+              <PuzzleGrid
+                puzzle={(room as any).puzzle}
+                onTileClick={(tile) => {
+                  console.log(`Clicked tile: ${tile.id}`);
+                  // Handle puzzle tile click
+                }}
+                onComplete={() => {
+                  console.log("Puzzle completed!");
+                  // Handle puzzle completion
+                }}
+              />
+            )}
+
+            {/* Special room effects */}
+            {(room as any).specialProperties && (
+              <group position={[0, roomHeight + 2, 0]}>
+                {/* Special room indicator */}
+                <mesh>
+                  <sphereGeometry args={[0.2, 8, 8]} />
+                  <meshBasicMaterial
+                    color="#FFD700"
+                    transparent
+                    opacity={0.8}
+                  />
+                </mesh>
+              </group>
+            )}
+          </>
+        )}
+      </>
     </group>
   );
 };
