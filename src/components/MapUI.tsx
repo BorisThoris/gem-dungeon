@@ -19,13 +19,15 @@ const MapUI: React.FC = () => {
         style={{
           position: "absolute",
           top: "20px",
-          left: "20px",
+          right: "20px",
           color: "white",
           background: "rgba(0,0,0,0.7)",
           padding: "10px",
           borderRadius: "8px",
           fontFamily: "monospace",
           fontSize: "14px",
+          zIndex: 1002,
+          pointerEvents: "auto",
         }}
       >
         {isGenerating ? "Generating map..." : "No map loaded"}
@@ -78,7 +80,7 @@ const MapUI: React.FC = () => {
       style={{
         position: "absolute",
         top: "20px",
-        left: "20px",
+        right: "20px",
         color: "white",
         background: "rgba(0,0,0,0.7)",
         padding: "15px",
@@ -86,6 +88,8 @@ const MapUI: React.FC = () => {
         fontFamily: "monospace",
         fontSize: "14px",
         minWidth: "250px",
+        zIndex: 1002,
+        pointerEvents: "auto",
       }}
     >
       <h3 style={{ margin: "0 0 10px 0", color: "#4CAF50" }}>Ghost Dungeon</h3>

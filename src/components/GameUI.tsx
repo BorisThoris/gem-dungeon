@@ -55,134 +55,128 @@ const GameUI: React.FC<GameUIProps> = ({
         zIndex: 1000,
       }}
     >
-      {/* Top HUD */}
+      {/* Top HUD - Player Stats */}
       <div
         style={{
           position: "absolute",
           top: "20px",
           left: "20px",
+          background: "rgba(0,0,0,0.8)",
+          padding: "15px",
+          borderRadius: "8px",
+          color: "white",
+          fontFamily: "monospace",
+          fontSize: "14px",
+          minWidth: "200px",
+          pointerEvents: "auto",
+          zIndex: 1001,
+        }}
+      >
+        <div
+          style={{
+            marginBottom: "10px",
+            fontSize: "16px",
+            fontWeight: "bold",
+          }}
+        >
+          Ghost Explorer
+        </div>
+
+        <div style={{ display: "flex", gap: "20px", marginBottom: "10px" }}>
+          <div>
+            <div>
+              ❤️ Lives: {playerStats.lives}/{playerStats.maxLives}
+            </div>
+            <div>⭐ Level: {playerStats.level}</div>
+            <div>🔥 Streak: {playerStats.streak}</div>
+          </div>
+          <div>
+            <div>💰 Points: {playerStats.points}</div>
+            <div>🗝️ Keys: {playerStats.keys}</div>
+            <div>💣 Bombs: {playerStats.bombs}</div>
+          </div>
+        </div>
+
+        {currentRoom && (
+          <div style={{ fontSize: "12px", color: "#ccc" }}>
+            Current Room: {currentRoom}
+          </div>
+        )}
+      </div>
+
+      {/* Inventory - Bottom Right */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: "20px",
           right: "20px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
+          background: "rgba(0,0,0,0.8)",
+          padding: "15px",
+          borderRadius: "8px",
+          color: "white",
+          fontFamily: "monospace",
+          fontSize: "14px",
+          minWidth: "300px",
+          maxHeight: "300px",
+          overflowY: "auto",
+          zIndex: 1001,
           pointerEvents: "auto",
         }}
       >
-        {/* Player Stats */}
         <div
           style={{
-            background: "rgba(0,0,0,0.8)",
-            padding: "15px",
-            borderRadius: "8px",
-            color: "white",
-            fontFamily: "monospace",
-            fontSize: "14px",
-            minWidth: "200px",
+            marginBottom: "10px",
+            fontSize: "16px",
+            fontWeight: "bold",
           }}
         >
-          <div
-            style={{
-              marginBottom: "10px",
-              fontSize: "16px",
-              fontWeight: "bold",
-            }}
-          >
-            Ghost Explorer
-          </div>
-
-          <div style={{ display: "flex", gap: "20px", marginBottom: "10px" }}>
-            <div>
-              <div>
-                ❤️ Lives: {playerStats.lives}/{playerStats.maxLives}
-              </div>
-              <div>⭐ Level: {playerStats.level}</div>
-              <div>🔥 Streak: {playerStats.streak}</div>
-            </div>
-            <div>
-              <div>💰 Points: {playerStats.points}</div>
-              <div>🗝️ Keys: {playerStats.keys}</div>
-              <div>💣 Bombs: {playerStats.bombs}</div>
-            </div>
-          </div>
-
-          {currentRoom && (
-            <div style={{ fontSize: "12px", color: "#ccc" }}>
-              Current Room: {currentRoom}
-            </div>
-          )}
+          Inventory ({inventory.length})
         </div>
 
-        {/* Inventory */}
-        <div
-          style={{
-            background: "rgba(0,0,0,0.8)",
-            padding: "15px",
-            borderRadius: "8px",
-            color: "white",
-            fontFamily: "monospace",
-            fontSize: "14px",
-            minWidth: "300px",
-            maxHeight: "400px",
-            overflowY: "auto",
-          }}
-        >
-          <div
-            style={{
-              marginBottom: "10px",
-              fontSize: "16px",
-              fontWeight: "bold",
-            }}
-          >
-            Inventory ({inventory.length})
-          </div>
-
-          {inventory.length === 0 ? (
-            <div style={{ color: "#666", fontStyle: "italic" }}>No items</div>
-          ) : (
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "8px" }}
-            >
-              {inventory.map((item) => (
-                <div
-                  key={item.id}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                    padding: "8px",
-                    background: "rgba(255,255,255,0.1)",
-                    borderRadius: "4px",
-                    cursor: onItemUse ? "pointer" : "default",
-                  }}
-                  onClick={() => onItemUse?.(item)}
-                >
-                  <span style={{ fontSize: "20px" }}>{item.icon}</span>
-                  <div style={{ flex: 1 }}>
-                    <div
-                      style={{
-                        color: getRarityColor(item.rarity),
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {item.name}
-                    </div>
-                    <div style={{ fontSize: "12px", color: "#ccc" }}>
-                      {item.description}
-                    </div>
-                    <div style={{ fontSize: "10px", color: "#999" }}>
-                      {item.type} • {item.rarity}
-                    </div>
+        {inventory.length === 0 ? (
+          <div style={{ color: "#666", fontStyle: "italic" }}>No items</div>
+        ) : (
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+            {inventory.map((item) => (
+              <div
+                key={item.id}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  padding: "8px",
+                  background: "rgba(255,255,255,0.1)",
+                  borderRadius: "4px",
+                  cursor: onItemUse ? "pointer" : "default",
+                }}
+                onClick={() => onItemUse?.(item)}
+              >
+                <span style={{ fontSize: "20px" }}>{item.icon}</span>
+                <div style={{ flex: 1 }}>
+                  <div
+                    style={{
+                      color: getRarityColor(item.rarity),
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {item.name}
                   </div>
-                  {item.maxUses && (
-                    <div style={{ fontSize: "12px", color: "#ffa500" }}>
-                      {item.currentUses}/{item.maxUses}
-                    </div>
-                  )}
+                  <div style={{ fontSize: "12px", color: "#ccc" }}>
+                    {item.description}
+                  </div>
+                  <div style={{ fontSize: "10px", color: "#999" }}>
+                    {item.type} • {item.rarity}
+                  </div>
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
+                {item.maxUses && (
+                  <div style={{ fontSize: "12px", color: "#ffa500" }}>
+                    {item.currentUses}/{item.maxUses}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Bottom HUD - Controls */}
