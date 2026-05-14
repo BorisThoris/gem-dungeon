@@ -1,6 +1,6 @@
-# ThreeJS Gem Dungeon Adventure
+# Gem Dungeon
 
-**ThreeJS Gem** is a React Three Fiber / Three.js first-person dungeon adventure prototype. It combines a 3D dungeon environment with generated rooms, puzzles, enemies, treasure/shop/special room types, inventory-style item data, visual effects, sound hooks, and map UI.
+**Gem Dungeon** is a React Three Fiber / Three.js first-person dungeon adventure prototype. It combines a 3D dungeon environment with generated rooms, puzzles, enemies, treasure/shop/special room types, inventory-style item data, visual effects, sound hooks, and map UI.
 
 This repository is a portfolio-ready 3D web game project rather than a small Three.js demo. It shows modern React, TypeScript, Three.js rendering, physics integration, state management, room/map systems, and reusable gameplay components.
 
