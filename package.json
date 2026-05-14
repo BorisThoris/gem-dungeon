@@ -1,8 +1,10 @@
 {
-  "name": "mygem",
+  "name": "threejs-gem-dungeon-adventure",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "description": "React Three Fiber dungeon adventure prototype with Three.js, TypeScript, Zustand, generated rooms, puzzles, and physics.",
+  "author": "Boris Bostandzhiev",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

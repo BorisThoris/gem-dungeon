@@ -1,73 +1,60 @@
-# React + TypeScript + Vite
+# ThreeJS Gem Dungeon Adventure
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**ThreeJS Gem** is a React Three Fiber / Three.js first-person dungeon adventure prototype. It combines a 3D dungeon environment with generated rooms, puzzles, enemies, treasure/shop/special room types, inventory-style item data, visual effects, sound hooks, and map UI.
 
-Currently, two official plugins are available:
+This repository is a portfolio-ready 3D web game project rather than a small Three.js demo. It shows modern React, TypeScript, Three.js rendering, physics integration, state management, room/map systems, and reusable gameplay components.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## What It Demonstrates
 
-## React Compiler
+- React 19 application structure with TypeScript and Vite.
+- Three.js rendering through `@react-three/fiber` and `@react-three/drei`.
+- Physics integration through `@react-three/rapier`.
+- First-person dungeon exploration flow.
+- Generated map/room state using Zustand stores.
+- Dungeon room types including puzzle, boss, shop, library, treasure, special, and secret rooms.
+- Interactions for doors, destructible walls, items, puzzles, enemies, particles, and visual effects.
+- Game UI, map UI, tutorial flow, sound hooks, settings hooks, and save-system hooks.
+- 3D asset usage through GLB, HDR, and VOX assets in `public/`.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+- React 19
+- TypeScript
+- Three.js
+- React Three Fiber
+- Drei
+- Rapier physics
+- Zustand
+- Vite
+- ESLint
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Main Code Areas
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- `src/App.tsx` - app entry point.
+- `src/components/StartScreen.tsx` - primary game shell.
+- `src/components/MapContainer.tsx`, `MapRenderer.tsx`, and `MapUI.tsx` - map display and interaction.
+- `src/components/Room.tsx` and `src/components/rooms/` - dungeon rooms and room-specific gameplay.
+- `src/components/FirstPersonPuzzle.tsx` and `PuzzleGrid.tsx` - puzzle interaction flow.
+- `src/components/GameManager.tsx`, `GameUI.tsx`, and `InteractionManager.tsx` - gameplay coordination and UI.
+- `src/store/` - Zustand game and map state.
+- `src/hooks/` - settings, save, and sound hooks.
+- `src/data/itemDatabase.ts` - item definitions.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Run Locally
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Useful scripts:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run build
+npm run lint
+npm run preview
 ```
+
+## Status
+
+Archived portfolio project. The goal of this repository is to show React/Three.js 3D game architecture and gameplay-system exploration, not to represent a finished commercial game.
