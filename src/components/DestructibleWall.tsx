@@ -39,22 +39,6 @@ const DestructibleWall: React.FC<DestructibleWallProps> = ({
     }
   }, [playerStats.bombs, inventory, bombRequired, isDestroyed]);
 
-  // Listen for B key press to use bomb
-  useEffect(() => {
-    const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.key === "b" || event.key === "B") {
-        if (isNearby && canDestroy && !isDestroyed) {
-          handleDestroyWall();
-        }
-      }
-    };
-
-    if (isNearby) {
-      document.addEventListener("keydown", handleKeyPress);
-      return () => document.removeEventListener("keydown", handleKeyPress);
-    }
-  }, [isNearby, canDestroy, isDestroyed, handleDestroyWall]);
-
   const handleDestroyWall = useCallback(() => {
     if (bombRequired) {
       // Use a bomb
@@ -74,6 +58,22 @@ const DestructibleWall: React.FC<DestructibleWallProps> = ({
     setIsDestroyed(true);
     onDestroy?.();
   }, [bombRequired, playerStats.bombs, useItem, inventory, onDestroy]);
+
+  // Listen for B key press to use bomb
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === "b" || event.key === "B") {
+        if (isNearby && canDestroy && !isDestroyed) {
+          handleDestroyWall();
+        }
+      }
+    };
+
+    if (isNearby) {
+      document.addEventListener("keydown", handleKeyPress);
+      return () => document.removeEventListener("keydown", handleKeyPress);
+    }
+  }, [isNearby, canDestroy, isDestroyed, handleDestroyWall]);
 
   // Damage handling would be implemented here
 
