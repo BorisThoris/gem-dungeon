@@ -43,18 +43,41 @@ This repository is a portfolio-ready 3D web game project rather than a small Thr
 ## Run Locally
 
 ```bash
-npm install
-npm run dev
+yarn install
+yarn dev
 ```
 
 Useful scripts:
 
 ```bash
-npm run build
-npm run lint
-npm run preview
+yarn build
+yarn lint
+yarn preview
 ```
+
+## Demo run
+
+```bash
+yarn install
+yarn build
+yarn preview --host 127.0.0.1 --port 4103
+```
+
+Open `http://127.0.0.1:4103/`. The explicit port avoids collisions with the other Vite demos.
 
 ## Status
 
 Archived portfolio project. The goal of this repository is to show React/Three.js 3D game architecture and gameplay-system exploration, not to represent a finished commercial game.
+
+## Cloudflare Pages
+
+- Pages project name: `gem-dungeon`
+- GitHub repository: `BorisThoris/gem-dungeon`
+- Production branch: `main`
+- Root directory: `.`
+- Build command: `yarn build`
+- Build output directory: `dist`
+- Environment variable: `NODE_VERSION=22.16.0`
+- Public URL target: `https://gem-dungeon.pages.dev/`
+
+Do not enable Cloudflare Access for the demo deployment. Leave frame-blocking headers unset so the portfolio can iframe the public build.
