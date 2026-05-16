@@ -18,9 +18,8 @@ const DestructibleWall: React.FC<DestructibleWallProps> = ({
   health = 3,
   bombRequired = false,
   onDestroy,
-  onDamage: _onDamage,
 }) => {
-  const { playerStats, inventory, useItem } = useGameStore();
+  const { playerStats, inventory, consumeItem } = useGameStore();
   const [currentHealth, setCurrentHealth] = useState(health);
   const [isDestroyed, setIsDestroyed] = useState(false);
   const [isNearby, setIsNearby] = useState(false);
@@ -32,7 +31,7 @@ const DestructibleWall: React.FC<DestructibleWallProps> = ({
     if (bombRequired) {
       const hasBomb =
         playerStats.bombs > 0 ||
-        inventory?.some((item: any) => item.id === "bomb");
+        inventory?.some((item) => item.id === "bomb");
       setCanDestroy(hasBomb && !isDestroyed);
     } else {
       setCanDestroy(!isDestroyed);
@@ -43,12 +42,12 @@ const DestructibleWall: React.FC<DestructibleWallProps> = ({
     if (bombRequired) {
       // Use a bomb
       if (playerStats.bombs > 0) {
-        useItem("bomb");
+        consumeItem("bomb");
       } else {
         // Use bomb item
-        const bombItem = inventory?.find((item: any) => item.id === "bomb");
+        const bombItem = inventory?.find((item) => item.id === "bomb");
         if (bombItem) {
-          useItem(bombItem.id);
+          consumeItem(bombItem.id);
         }
       }
     }
@@ -57,7 +56,7 @@ const DestructibleWall: React.FC<DestructibleWallProps> = ({
     setCurrentHealth(0);
     setIsDestroyed(true);
     onDestroy?.();
-  }, [bombRequired, playerStats.bombs, useItem, inventory, onDestroy]);
+  }, [bombRequired, playerStats.bombs, consumeItem, inventory, onDestroy]);
 
   // Listen for B key press to use bomb
   useEffect(() => {

@@ -48,7 +48,7 @@ const FirstPersonPuzzle: React.FC<FirstPersonPuzzleProps> = ({
     }, 2000);
   };
 
-  const handleTileClick = (_tile: any) => {
+  const handleTileClick = () => {
     setMoves((prev) => prev + 1);
   };
 

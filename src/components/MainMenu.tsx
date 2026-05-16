@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useSaveSystem } from "../hooks/useSaveSystem";
-import { useSettings } from "../hooks/useSettings";
 
 interface MainMenuProps {
   onStartGame: () => void;
@@ -16,7 +15,6 @@ const MainMenu: React.FC<MainMenuProps> = ({
   onShowCredits,
 }) => {
   const { hasSaveData, getSaveInfo, deleteSave } = useSaveSystem();
-  const {} = useSettings();
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 
   const saveInfo = getSaveInfo();

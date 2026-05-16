@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Text } from "@react-three/drei";
+import type { Item } from "../types/map";
+
+interface TutorialGameState {
+  currentRoomId: string | null;
+  inventory: Item[];
+  gamePhase: "exploration" | "combat" | "puzzle" | "boss";
+  discoveredSecrets: string[];
+}
 
 interface TutorialStep {
   id: string;
@@ -14,12 +22,12 @@ interface TutorialStep {
     | "boss_encounter"
     | "secret_discover"
     | "manual";
-  condition?: (gameState: any) => boolean;
+  condition?: (gameState: TutorialGameState) => boolean;
   completed: boolean;
 }
 
 interface TutorialSystemProps {
-  gameState: any;
+  gameState: TutorialGameState;
   onTutorialComplete: (tutorialId: string) => void;
 }
 
@@ -65,7 +73,7 @@ const TUTORIAL_STEPS: TutorialStep[] = [
       "Spend points to buy items. Green = affordable, Red = too expensive.",
     position: [0, 2, 0],
     trigger: "room_enter",
-    condition: (state) => state.currentRoomId?.includes("shop"),
+    condition: (state) => Boolean(state.currentRoomId?.includes("shop")),
     completed: false,
   },
   {

@@ -1,6 +1,6 @@
 import React from "react";
 import { RigidBody } from "@react-three/rapier";
-import type { Room as RoomType, Item } from "../types/map";
+import type { Room as RoomType, Item, RoomType as RoomTypeName } from "../types/map";
 import { RoomType as RoomTypeValues } from "../types/map";
 import ItemSprite from "./ItemSprite";
 import PuzzleGrid from "./PuzzleGrid";
@@ -12,6 +12,19 @@ import LibraryRoom from "./rooms/LibraryRoom";
 import RoomInteraction from "./RoomInteraction";
 import Door from "./Door";
 import DestructibleWall from "./DestructibleWall";
+
+type SpecialRoomKind = "devil-room" | "angel-room" | "cursed-room" | "secret";
+
+const specializedRoomTypes: RoomTypeName[] = [
+  RoomTypeValues.TREASURE,
+  RoomTypeValues.SHOP,
+  RoomTypeValues.PUZZLE,
+  RoomTypeValues.DEVIL_ROOM,
+  RoomTypeValues.ANGEL_ROOM,
+  RoomTypeValues.CURSED_ROOM,
+  RoomTypeValues.SECRET,
+  RoomTypeValues.LIBRARY,
+];
 
 interface RoomProps {
   room: RoomType;
@@ -385,12 +398,12 @@ const Room: React.FC<RoomProps> = ({
         {/* Specialized Room Types */}
         {room.type === RoomTypeValues.TREASURE && (
           <TreasureRoom
-            items={(room as any).items || []}
+            items={room.items || []}
             onItemPickup={(item) => {
               console.log(`Picked up treasure: ${item.name}`);
               // Handle treasure pickup
             }}
-            isOpened={(room as any).isOpened || false}
+            isOpened={room.isOpened || false}
             onOpen={() => {
               console.log("Opened treasure chest!");
               // Handle chest opening
@@ -400,7 +413,7 @@ const Room: React.FC<RoomProps> = ({
 
         {room.type === RoomTypeValues.SHOP && (
           <ShopRoom
-            items={(room as any).items || []}
+            items={room.items || []}
             onItemPurchase={(item) => {
               console.log(`Purchased: ${item.name} for ${item.cost} points`);
               // Handle item purchase
@@ -409,9 +422,9 @@ const Room: React.FC<RoomProps> = ({
           />
         )}
 
-        {room.type === RoomTypeValues.PUZZLE && (room as any).puzzle && (
+        {room.type === RoomTypeValues.PUZZLE && room.puzzle && (
           <PuzzleRoom
-            puzzle={(room as any).puzzle}
+            puzzle={room.puzzle}
             onPuzzleComplete={() => {
               console.log("Puzzle completed!");
               // Handle puzzle completion
@@ -420,7 +433,7 @@ const Room: React.FC<RoomProps> = ({
               console.log(`Clicked tile: ${tile.id}`);
               // Handle puzzle tile click
             }}
-            reward={(room as any).reward}
+            reward={room.reward}
             onRewardClaim={(item) => {
               console.log(`Claimed reward: ${item.name}`);
               // Handle reward claim
@@ -433,8 +446,8 @@ const Room: React.FC<RoomProps> = ({
           room.type === RoomTypeValues.CURSED_ROOM ||
           room.type === RoomTypeValues.SECRET) && (
           <SpecialRoom
-            roomType={room.type as any}
-            items={(room as any).items || []}
+            roomType={room.type as SpecialRoomKind}
+            items={room.items || []}
             onItemInteraction={(item) => {
               console.log(`Interacted with special item: ${item.name}`);
               // Handle special item interaction
@@ -448,7 +461,7 @@ const Room: React.FC<RoomProps> = ({
 
         {room.type === RoomTypeValues.LIBRARY && (
           <LibraryRoom
-            books={(room as any).books || []}
+            books={room.books || room.items || []}
             onBookRead={(book) => {
               console.log(`Read book: ${book.name}`);
               // Handle book reading
@@ -461,19 +474,10 @@ const Room: React.FC<RoomProps> = ({
         )}
 
         {/* Fallback for other room types */}
-        {![
-          RoomTypeValues.TREASURE,
-          RoomTypeValues.SHOP,
-          RoomTypeValues.PUZZLE,
-          RoomTypeValues.DEVIL_ROOM,
-          RoomTypeValues.ANGEL_ROOM,
-          RoomTypeValues.CURSED_ROOM,
-          RoomTypeValues.SECRET,
-          RoomTypeValues.LIBRARY,
-        ].includes(room.type as any) && (
+        {!specializedRoomTypes.includes(room.type as RoomTypeName) && (
           <>
             {/* Items in room */}
-            {(room as any).items?.map((item: Item, index: number) => (
+            {room.items?.map((item: Item, index: number) => (
               <ItemSprite
                 key={item.id}
                 item={item}
@@ -493,9 +497,9 @@ const Room: React.FC<RoomProps> = ({
             ))}
 
             {/* Puzzle in room */}
-            {(room as any).puzzle && (
+            {room.puzzle && (
               <PuzzleGrid
-                puzzle={(room as any).puzzle}
+                puzzle={room.puzzle}
                 onTileClick={(tile) => {
                   console.log(`Clicked tile: ${tile.id}`);
                   // Handle puzzle tile click
@@ -508,7 +512,7 @@ const Room: React.FC<RoomProps> = ({
             )}
 
             {/* Special room effects */}
-            {(room as any).specialProperties && (
+            {room.specialProperties && (
               <group position={[0, roomHeight + 2, 0]}>
                 {/* Special room indicator */}
                 <mesh>

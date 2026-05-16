@@ -17,7 +17,6 @@ const PuzzleRoom: React.FC<PuzzleRoomProps> = ({
   onPuzzleComplete,
   onTileClick,
   reward,
-  onRewardClaim: _onRewardClaim,
 }) => {
   const [isCompleted, setIsCompleted] = useState(false);
   const [showReward, setShowReward] = useState(false);

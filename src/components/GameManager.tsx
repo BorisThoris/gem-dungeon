@@ -11,7 +11,6 @@ interface GameManagerProps {
 
 const GameManager: React.FC<GameManagerProps> = ({
   playerPosition,
-  onPlayerDamage: _onPlayerDamage,
 }) => {
   const {
     playerStats,

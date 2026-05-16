@@ -8,6 +8,10 @@ interface SoundEffect {
   volume: number;
 }
 
+interface WebkitWindow extends Window {
+  webkitAudioContext?: typeof AudioContext;
+}
+
 const SOUND_EFFECTS: Record<string, SoundEffect> = {
   itemPickup: {
     name: 'Item Pickup',
@@ -100,7 +104,10 @@ export const useSoundEffects = () => {
 
   const initAudioContext = useCallback(() => {
     if (!audioContextRef.current) {
-      audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const AudioContextConstructor =
+        window.AudioContext || (window as WebkitWindow).webkitAudioContext;
+      if (!AudioContextConstructor) return;
+      audioContextRef.current = new AudioContextConstructor();
     }
   }, []);
 

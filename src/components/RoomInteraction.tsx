@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Text } from "@react-three/drei";
-import useGameStore from "../store/gameStore";
 import type { Room } from "../types/map";
 
 interface RoomInteractionProps {
@@ -14,7 +13,6 @@ const RoomInteraction: React.FC<RoomInteractionProps> = ({
   playerPosition,
   onInteraction,
 }) => {
-  const {} = useGameStore();
   const [isNearby, setIsNearby] = useState(false);
   const [interactionPrompt, setInteractionPrompt] = useState<string | null>(
     null
@@ -23,8 +21,8 @@ const RoomInteraction: React.FC<RoomInteractionProps> = ({
   // Check if player is close enough to interact
   useEffect(() => {
     const distance = Math.sqrt(
-      Math.pow(playerPosition[0] - (room.position as any)[0], 2) +
-        Math.pow(playerPosition[2] - (room.position as any)[2], 2)
+      Math.pow(playerPosition[0] - room.position.x, 2) +
+        Math.pow(playerPosition[2] - room.position.z, 2)
     );
 
     const isClose = distance < 3;
@@ -32,7 +30,7 @@ const RoomInteraction: React.FC<RoomInteractionProps> = ({
 
     if (isClose) {
       // Determine what interaction is available
-      if (room.type === "puzzle" && (room as any).puzzle) {
+      if (room.type === "puzzle" && room.puzzle) {
         setInteractionPrompt("Press E to solve puzzle");
       } else if (
         room.type === "treasure" &&
@@ -58,7 +56,7 @@ const RoomInteraction: React.FC<RoomInteractionProps> = ({
   }, [playerPosition, room]);
 
   // Handle interaction based on room type
-  const handleInteraction = () => {
+  const handleInteraction = React.useCallback(() => {
     if (!isNearby) return;
 
     switch (room.type) {
@@ -85,7 +83,7 @@ const RoomInteraction: React.FC<RoomInteractionProps> = ({
         onInteraction("secret", room.id);
         break;
     }
-  };
+  }, [isNearby, onInteraction, room.id, room.type]);
 
   // Listen for E key press
   useEffect(() => {
@@ -99,16 +97,16 @@ const RoomInteraction: React.FC<RoomInteractionProps> = ({
       document.addEventListener("keydown", handleKeyPress);
       return () => document.removeEventListener("keydown", handleKeyPress);
     }
-  }, [isNearby, room]);
+  }, [isNearby, room, handleInteraction]);
 
   if (!isNearby || !interactionPrompt) return null;
 
   return (
     <group
       position={[
-        (room.position as any)[0],
-        (room.position as any)[1] + 3,
-        (room.position as any)[2],
+        room.position.x,
+        3,
+        room.position.z,
       ]}
     >
       {/* Interaction Prompt */}

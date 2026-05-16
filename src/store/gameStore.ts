@@ -47,7 +47,7 @@ interface GameActions {
   // Inventory
   addItem: (item: Item) => void;
   removeItem: (itemId: string) => void;
-  useItem: (itemId: string) => boolean;
+  consumeItem: (itemId: string) => boolean;
   getItem: (itemId: string) => Item | undefined;
   
   // Game mechanics
@@ -263,7 +263,7 @@ const useGameStore = create<GameState & GameActions>((set, get) => ({
     }));
   },
 
-  useItem: (itemId) => {
+  consumeItem: (itemId) => {
     const state = get();
     const item = state.inventory.find(i => i.id === itemId);
     

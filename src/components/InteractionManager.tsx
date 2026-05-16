@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import useGameStore from "../store/gameStore";
 import useMapStore from "../store/mapStore";
 import FirstPersonPuzzle from "./FirstPersonPuzzle";
@@ -8,9 +8,7 @@ interface InteractionManagerProps {
   playerPosition: [number, number, number];
 }
 
-const InteractionManager: React.FC<InteractionManagerProps> = ({
-  playerPosition: _playerPosition,
-}) => {
+const InteractionManager: React.FC<InteractionManagerProps> = () => {
   const { addScore, addExperience, addItem, setGamePhase } = useGameStore();
   const { currentMap } = useMapStore();
 
@@ -25,7 +23,7 @@ const InteractionManager: React.FC<InteractionManagerProps> = ({
   // Room interaction handlers would be implemented here
 
   // Handle puzzle completion
-  const handlePuzzleComplete = () => {
+  const handlePuzzleComplete = useCallback(() => {
     if (!interactionRoom) return;
 
     setPuzzleComplete(true);
@@ -40,15 +38,15 @@ const InteractionManager: React.FC<InteractionManagerProps> = ({
     }
 
     console.log("Puzzle completed! You received a reward!");
-  };
+  }, [addExperience, addItem, addScore, interactionRoom]);
 
   // Handle puzzle exit
-  const handlePuzzleExit = () => {
+  const handlePuzzleExit = useCallback(() => {
     setActiveInteraction(null);
     setInteractionRoom(null);
     setPuzzleComplete(false);
     setGamePhase("exploration");
-  };
+  }, [setGamePhase]);
 
   // Auto-exit puzzle after completion
   useEffect(() => {
@@ -58,7 +56,7 @@ const InteractionManager: React.FC<InteractionManagerProps> = ({
       }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [puzzleComplete]);
+  }, [puzzleComplete, handlePuzzleExit]);
 
   // Render active interaction
   const renderActiveInteraction = () => {
@@ -66,10 +64,10 @@ const InteractionManager: React.FC<InteractionManagerProps> = ({
 
     switch (activeInteraction) {
       case "puzzle":
-        if ((interactionRoom as any).puzzle) {
+        if (interactionRoom.puzzle) {
           return (
             <FirstPersonPuzzle
-              puzzle={(interactionRoom as any).puzzle}
+              puzzle={interactionRoom.puzzle}
               onComplete={handlePuzzleComplete}
               onExit={handlePuzzleExit}
             />

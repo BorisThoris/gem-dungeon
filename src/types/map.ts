@@ -12,9 +12,16 @@ export interface Room {
   isVisited: boolean;
   isCurrent: boolean;
   // Enhanced room properties
-  items?: any[]; // Demo items for special rooms
-  specialProperties?: { [key: string]: any }; // Special room properties
+  items?: Item[]; // Demo items for special rooms
+  books?: Item[];
+  puzzle?: Puzzle;
+  reward?: Item;
+  isOpened?: boolean;
+  specialProperties?: RoomSpecialProperties; // Special room properties
 }
+
+export type RoomSpecialProperty = string | number | boolean;
+export type RoomSpecialProperties = Record<string, RoomSpecialProperty>;
 
 export const RoomType = {
   START: 'start',
@@ -120,7 +127,7 @@ export interface Puzzle {
 export interface EnhancedRoom extends Room {
   puzzle?: Puzzle;
   items: Item[];
-  specialProperties?: { [key: string]: any };
+  specialProperties?: RoomSpecialProperties;
   rewards: Item[];
   isLocked?: boolean;
   requiresKey?: boolean;

@@ -20,19 +20,36 @@ const Door: React.FC<DoorProps> = ({
   keyId,
   isLocked = false,
   onOpen,
-  onClose: _onClose,
 }) => {
-  const { playerStats, inventory, useItem } = useGameStore();
+  const { playerStats, inventory, consumeItem } = useGameStore();
   const [isOpen, setIsOpen] = useState(false);
   const [isNearby, setIsNearby] = useState(false);
   const [canOpen, setCanOpen] = useState(false);
+
+  const handleOpenDoor = useCallback(() => {
+    if (keyRequired && keyId) {
+      // Use a key
+      if (playerStats.keys > 0) {
+        consumeItem("key");
+      } else {
+        // Use specific key item
+        const keyItem = inventory?.find((item) => item.id === keyId);
+        if (keyItem) {
+          consumeItem(keyItem.id);
+        }
+      }
+    }
+
+    setIsOpen(true);
+    onOpen?.();
+  }, [keyRequired, keyId, playerStats.keys, consumeItem, inventory, onOpen]);
 
   // Check if player can open the door
   useEffect(() => {
     if (keyRequired && keyId) {
       const hasKey =
         playerStats.keys > 0 ||
-        inventory?.some((item: any) => item.id === keyId);
+        inventory?.some((item) => item.id === keyId);
       setCanOpen(hasKey && !isLocked);
     } else {
       setCanOpen(!isLocked);
@@ -53,25 +70,7 @@ const Door: React.FC<DoorProps> = ({
       document.addEventListener("keydown", handleKeyPress);
       return () => document.removeEventListener("keydown", handleKeyPress);
     }
-  }, [isNearby, canOpen, isOpen]);
-
-  const handleOpenDoor = useCallback(() => {
-    if (keyRequired && keyId) {
-      // Use a key
-      if (playerStats.keys > 0) {
-        useItem("key");
-      } else {
-        // Use specific key item
-        const keyItem = inventory?.find((item: any) => item.id === keyId);
-        if (keyItem) {
-          useItem(keyItem.id);
-        }
-      }
-    }
-
-    setIsOpen(true);
-    onOpen?.();
-  }, [keyRequired, keyId, playerStats.keys, useItem, inventory, onOpen]);
+  }, [isNearby, canOpen, isOpen, handleOpenDoor]);
 
   // Door closing would be implemented here
 

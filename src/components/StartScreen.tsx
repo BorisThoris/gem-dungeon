@@ -75,7 +75,7 @@ const GhostScene: React.FC = () => {
 };
 
 const StartScreen: React.FC = () => {
-  const { playerStats, inventory, useItem } = useGameStore();
+  const { playerStats, inventory, consumeItem } = useGameStore();
 
   return (
     <div
@@ -115,7 +115,7 @@ const StartScreen: React.FC = () => {
         inventory={inventory}
         currentRoom="Start Room"
         onItemUse={(item) => {
-          useItem(item.id);
+          consumeItem(item.id);
         }}
       />
 
