@@ -97,6 +97,7 @@ export function Player({
         ref={ref}
         colliders={false}
         mass={50}
+        name="canonical-player"
         type="dynamic"
         position={spawnPosition}
         enabledRotations={[false, false, false]}

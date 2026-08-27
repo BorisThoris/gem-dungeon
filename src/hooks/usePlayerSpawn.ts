@@ -30,12 +30,11 @@ export const usePlayerSpawn = ({
 
   // Find safe spawn position on mount
   useEffect(() => {
-    // Use a fixed safe height that should work for most rooms
-    // This places the player 1.5 units above the floor (which is typically at Y=-0.5)
+    // The canonical geometry adapter supplies a floor-aware, validated spawn.
     const safeSpawnPosition: [number, number, number] = [
-      initialSpawnPosition[0], // Keep X position
-      1.5, // Safe height above floor
-      initialSpawnPosition[2], // Keep Z position
+      initialSpawnPosition[0],
+      initialSpawnPosition[1],
+      initialSpawnPosition[2],
     ];
 
     setSpawnPosition(safeSpawnPosition);

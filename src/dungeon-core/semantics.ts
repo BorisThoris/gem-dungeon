@@ -167,7 +167,7 @@ export function directDungeonSemantics(
   }
   const directedGraph = portalResult.value;
 
-  const edgeAssignments: SemanticEdgeAssignment[] = directedGraph.edges.map((edge) => {
+  const directedAssignments: SemanticEdgeAssignment[] = directedGraph.edges.map((edge) => {
     const portal = edge.kind === "portal";
     const secret = secretIds.has(edge.id);
     const breakable = breakableIds.has(edge.id);
@@ -179,6 +179,12 @@ export function directDungeonSemantics(
       traversal: portal ? openTraversal() : edgeRules.get(edge.id) ?? openTraversal(),
     };
   });
+  const edgeAssignments = propagateProgressionRegionRequirements(
+    directedGraph,
+    directedAssignments,
+    nodeById,
+    trace,
+  );
 
   const rooms: SemanticRoomAssignment[] = [...assignments.values()]
     .sort((left, right) => left.nodeId.localeCompare(right.nodeId))
@@ -205,6 +211,72 @@ export function directDungeonSemantics(
       rooms,
     }),
   };
+}
+
+function propagateProgressionRegionRequirements(
+  graph: MissionGraph,
+  edgeAssignments: readonly SemanticEdgeAssignment[],
+  nodeById: ReadonlyMap<string, MissionNode>,
+  trace: GenerationTraceEvent[],
+): SemanticEdgeAssignment[] {
+  const edgeById = new Map(graph.edges.map((edge) => [edge.id, edge]));
+  const assignmentByEdge = new Map(
+    edgeAssignments.map((assignment) => [assignment.edgeId, assignment]),
+  );
+  const gates = graph.edges
+    .filter((edge) => edge.mandatory)
+    .map((edge) => {
+      const traversal = assignmentByEdge.get(edge.id)?.traversal;
+      return {
+        depth: Math.max(
+          nodeById.get(edge.from)?.progressionDepth ?? 0,
+          nodeById.get(edge.to)?.progressionDepth ?? 0,
+        ),
+        requiredFlags: traversal?.requiredFlags ?? [],
+        requiredItems: traversal?.requiredItems ?? [],
+      };
+    })
+    .filter((gate) => gate.requiredFlags.length > 0 || gate.requiredItems.length > 0);
+  let propagated = 0;
+  const result = edgeAssignments.map((assignment) => {
+    const edge = edgeById.get(assignment.edgeId);
+    if (!edge) return assignment;
+    const minimumDepth = Math.min(
+      nodeById.get(edge.from)?.progressionDepth ?? 0,
+      nodeById.get(edge.to)?.progressionDepth ?? 0,
+    );
+    const inherited = gates.filter((gate) => gate.depth <= minimumDepth);
+    if (inherited.length === 0) return assignment;
+    const requiredFlags = [...new Set([
+      ...assignment.traversal.requiredFlags,
+      ...inherited.flatMap((gate) => gate.requiredFlags),
+    ])].sort();
+    const requiredItems = [...new Set([
+      ...assignment.traversal.requiredItems,
+      ...inherited.flatMap((gate) => gate.requiredItems),
+    ])].sort();
+    if (
+      requiredFlags.length === assignment.traversal.requiredFlags.length
+      && requiredItems.length === assignment.traversal.requiredItems.length
+    ) return assignment;
+    propagated += 1;
+    return {
+      ...assignment,
+      traversal: {
+        ...assignment.traversal,
+        lockedByDefault: true,
+        requiredFlags,
+        requiredItems,
+      },
+    };
+  });
+  trace.push({
+    attempt: 0,
+    code: "SEMANTICS_PROGRESS_REGION_GUARDS",
+    message: `Propagated mandatory gate requirements to ${propagated} downstream connections`,
+    stage: "semantics",
+  });
+  return result;
 }
 
 function archetypeForNode(

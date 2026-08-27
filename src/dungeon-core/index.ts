@@ -14,6 +14,7 @@ export {
   stableStringify,
 } from "./identity";
 export {
+  canTraverseDungeonConnection,
   createDungeonRunState,
   enterDungeonRoom,
   freezeDungeon,
@@ -21,6 +22,7 @@ export {
   getDungeonRoom,
   getRoomConnections,
   getRoomSocket,
+  openDungeonConnection,
 } from "./model";
 export { computeDungeonMetrics, type DungeonMetricsInput } from "./metrics";
 export { OccupancyGrid, type OccupancyRecord, type ReservationResult } from "./occupancy";
@@ -33,6 +35,15 @@ export {
   type RngStreamName,
   type RngStreams,
 } from "./rng";
+export {
+  DUNGEON_RUN_STATE_SCHEMA_VERSION,
+  assertDungeonRunState,
+  decodeDungeonRunState,
+  dungeonRunStateFromDocument,
+  encodeDungeonRunState,
+  toDungeonRunStateDocument,
+  type DungeonRunStateDocument,
+} from "./run-state-serialization";
 export {
   routeAStar,
   routeDungeonConnections,

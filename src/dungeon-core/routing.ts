@@ -44,6 +44,8 @@ interface SearchResult {
   readonly route: CorridorRoute | null;
 }
 
+export type CorridorReusePolicy = (ownerIds: readonly string[]) => boolean;
+
 interface SocketPair {
   readonly from: Socket;
   readonly order: number;
@@ -245,6 +247,7 @@ export function routeAStar(
   goal: GridCell,
   occupancy: OccupancyGrid,
   config: GenerationConfig,
+  canReuseCorridor: CorridorReusePolicy = () => true,
 ): SearchResult {
   if (start.floor !== goal.floor) {
     return { expandedNodes: 0, route: null };
@@ -253,6 +256,8 @@ export function routeAStar(
   if (
     !occupancy.canRouteThrough(start, endpointKeys)
     || !occupancy.canRouteThrough(goal, endpointKeys)
+    || !canReuseCorridor(occupancy.get(start)?.corridorOwnerIds ?? [])
+    || !canReuseCorridor(occupancy.get(goal)?.corridorOwnerIds ?? [])
   ) {
     return { expandedNodes: 0, route: null };
   }
@@ -320,7 +325,9 @@ export function routeAStar(
         continue;
       }
       const nextKey = searchKey(next, direction.id);
-      const nextExisting = occupancy.corridorOwnerCount(next) > 0;
+      const nextOwners = occupancy.get(next)?.corridorOwnerIds ?? [];
+      const nextExisting = nextOwners.length > 0;
+      if (nextExisting && !canReuseCorridor(nextOwners)) continue;
       const currentExisting = occupancy.corridorOwnerCount(current.cell) > 0;
       let transitionCost = nextExisting
         ? config.routing.existingCorridorCost

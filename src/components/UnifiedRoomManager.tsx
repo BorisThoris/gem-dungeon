@@ -14,6 +14,7 @@ import DoorDebugger from "./DoorDebugger";
 import DebugSign from "./DebugSign";
 import RoomInstanceRenderer from "./RoomInstanceRenderer";
 import RoomTransitionEffect from "./RoomTransitionEffect";
+import CanonicalDungeonWorld from "./dungeon/CanonicalDungeonWorld";
 
 // Data and utils
 import { playerRoomDetection } from "../utils/playerRoomDetection";
@@ -35,6 +36,7 @@ interface DoorPosition {
 }
 
 interface UnifiedRoomManagerProps {
+  mode?: string;
   playerPosition?: [number, number, number];
   onRoomChange?: (roomId: string) => void;
   onRoomEnter?: (roomId: string) => void;
@@ -160,7 +162,7 @@ const UnifiedRoomManager: React.FC<UnifiedRoomManagerProps> = memo(
       toRoomId,
     } = consolidatedStore;
     const { isDoorUnlocked, getDoorState, getDoorType, unlockDoor } = doorStore;
-    const { currentMap } = mapStore;
+    const { currentDungeon, currentMap, dungeonRunState } = mapStore;
     const { updateRoom, updateGamePhase } = gameState;
 
     // Refs for room detection
@@ -202,10 +204,12 @@ const UnifiedRoomManager: React.FC<UnifiedRoomManagerProps> = memo(
 
     // Initialize room bounds for player detection
     useEffect(() => {
-      if (currentMap?.rooms) {
+      if (currentDungeon) {
+        playerRoomDetection.initializeDungeon(currentDungeon);
+      } else if (currentMap?.rooms) {
         playerRoomDetection.initializeRoomBounds(currentMap.rooms);
       }
-    }, [currentMap]);
+    }, [currentDungeon, currentMap]);
 
     // Handle room changes
     useEffect(() => {
@@ -338,6 +342,18 @@ const UnifiedRoomManager: React.FC<UnifiedRoomManagerProps> = memo(
       },
       [startTransition]
     );
+
+    if (currentDungeon && dungeonRunState) {
+      return (
+        <CanonicalDungeonWorld
+          dungeon={currentDungeon}
+          onOpenConnection={mapStore.openConnection}
+          onTraverse={mapStore.setCurrentRoom}
+          runState={dungeonRunState}
+          wallsEnabled={consolidatedStore.wallsEnabled}
+        />
+      );
+    }
 
     // Show loading/transition state
     if (activeTransitioning) {

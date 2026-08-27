@@ -1,6 +1,12 @@
 import { beforeAll, describe, expect, test } from "vitest";
 import { generateDungeon } from "../generator";
 import { stableStringify } from "../identity";
+import { createDungeonRunState, enterDungeonRoom } from "../model";
+import {
+  DUNGEON_RUN_STATE_SCHEMA_VERSION,
+  decodeDungeonRunState,
+  encodeDungeonRunState,
+} from "../run-state-serialization";
 import {
   DungeonSerializationError,
   decodeDungeon,
@@ -67,6 +73,43 @@ describe("versioned canonical serialization", () => {
   test("rejects unknown schema versions explicitly", () => {
     expect(() => migrateDungeonDocument({ schemaVersion: "99.0.0" })).toThrow(
       /Unsupported dungeon schema version/,
+    );
+  });
+
+  test("round-trips mutable run state without leaking Set serialization", () => {
+    const initial = createDungeonRunState(dungeon);
+    const adjacentConnection = dungeon.connections.find(
+      (connection) => connection.from.roomId === dungeon.startRoomId,
+    );
+    const adjacentRoomId = adjacentConnection?.to.roomId ?? dungeon.startRoomId;
+    const entered = enterDungeonRoom(dungeon, initial, adjacentRoomId);
+    const state = {
+      ...entered,
+      completedRoomIds: new Set([dungeon.startRoomId]),
+      openedConnectionIds: new Set(
+        adjacentConnection ? [adjacentConnection.id] : [],
+      ),
+    };
+
+    const encoded = encodeDungeonRunState(dungeon, state);
+    const decoded = decodeDungeonRunState(dungeon, encoded);
+    expect(decoded).toEqual(state);
+    expect(encodeDungeonRunState(dungeon, decoded)).toBe(encoded);
+    expect(JSON.parse(encoded).schemaVersion).toBe(DUNGEON_RUN_STATE_SCHEMA_VERSION);
+  });
+
+  test("rejects run state paired with another dungeon or dangling references", () => {
+    const state = createDungeonRunState(dungeon);
+    const document = JSON.parse(encodeDungeonRunState(dungeon, state));
+    document.dungeonSpatialHash = "different-dungeon";
+    expect(() => decodeDungeonRunState(dungeon, JSON.stringify(document))).toThrow(
+      /different canonical dungeon/,
+    );
+
+    document.dungeonSpatialHash = dungeon.replay.spatialHash;
+    document.visitedRoomIds.push("missing-room");
+    expect(() => decodeDungeonRunState(dungeon, JSON.stringify(document))).toThrow(
+      /missing room/,
     );
   });
 });

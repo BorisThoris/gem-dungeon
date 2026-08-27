@@ -1,4 +1,11 @@
-import type { Room } from '../types/map';
+import {
+  createDungeonSpatialIndex,
+  detectDungeonRoom,
+  gridCellToWorld,
+  type DungeonSpatialIndex,
+} from "../dungeon-core/spatial";
+import type { Dungeon } from "../dungeon-core/types";
+import type { Room } from "../types/map";
 
 export interface RoomBounds {
   id: string;
@@ -14,153 +21,121 @@ export interface RoomBounds {
 }
 
 export class PlayerRoomDetection {
-  private roomBounds: Map<string, RoomBounds> = new Map();
+  private canonicalDungeon: Dungeon | null = null;
+  private canonicalIndex: DungeonSpatialIndex | null = null;
+  private readonly roomBounds = new Map<string, RoomBounds>();
   private currentRoomId: string | null = null;
   private lastPlayerPosition: { x: number; y: number; z: number } | null = null;
-  private detectionThreshold = 2.0; // Only recalculate when player moves this distance
+  private detectionThreshold = 0.25;
   private detectionEnabled = true;
 
-  /**
-   * Initialize room bounds from map data
-   */
-  initializeRoomBounds(rooms: Room[]): void {
+  initializeDungeon(dungeon: Dungeon): void {
+    this.canonicalDungeon = dungeon;
+    this.canonicalIndex = createDungeonSpatialIndex(dungeon);
     this.roomBounds.clear();
-    
-    rooms.forEach(room => {
-      const roomSize = room.size || 10;
-      const halfSize = roomSize / 2;
-      const tolerance = 0.5; // Small tolerance for edge cases
-      
-      const bounds: RoomBounds = {
+    for (const room of dungeon.rooms) {
+      const centers = room.footprint.cells.map((cell) => gridCellToWorld(cell, dungeon.config));
+      const halfCell = dungeon.config.world.cellSize / 2;
+      const floorCenter = room.transform.origin.floor * dungeon.config.world.floorHeight;
+      const width =
+        (room.footprint.bounds.maxX - room.footprint.bounds.minX + 1)
+        * dungeon.config.world.cellSize;
+      const depth =
+        (room.footprint.bounds.maxZ - room.footprint.bounds.minZ + 1)
+        * dungeon.config.world.cellSize;
+      this.roomBounds.set(room.id, {
+        centerX: centers.reduce((total, center) => total + center.x, 0) / centers.length,
+        centerZ: centers.reduce((total, center) => total + center.z, 0) / centers.length,
         id: room.id,
-        minX: room.position.x - halfSize - tolerance,
-        maxX: room.position.x + halfSize + tolerance,
-        minZ: room.position.z - halfSize - tolerance,
-        maxZ: room.position.z + halfSize + tolerance,
-        minY: -2, // Allow some vertical tolerance
-        maxY: 4,
+        maxX: Math.max(...centers.map((center) => center.x)) + halfCell,
+        maxY: floorCenter + dungeon.config.world.floorHeight / 2,
+        maxZ: Math.max(...centers.map((center) => center.z)) + halfCell,
+        minX: Math.min(...centers.map((center) => center.x)) - halfCell,
+        minY: floorCenter - dungeon.config.world.floorHeight / 2,
+        minZ: Math.min(...centers.map((center) => center.z)) - halfCell,
+        size: Math.max(width, depth),
+      });
+    }
+    this.clearCurrentRoom();
+  }
+
+  /** @deprecated Legacy square bounds are supported only for non-canonical maps. */
+  initializeRoomBounds(rooms: Room[]): void {
+    this.canonicalDungeon = null;
+    this.canonicalIndex = null;
+    this.roomBounds.clear();
+    for (const room of rooms) {
+      const roomSize = room.actualSize ?? room.size ?? 10;
+      const halfSize = roomSize / 2;
+      this.roomBounds.set(room.id, {
         centerX: room.position.x,
         centerZ: room.position.z,
-        size: roomSize
-      };
-      
-      this.roomBounds.set(room.id, bounds);
-    });
-    
-    // PlayerRoomDetection: Initialized bounds
-  }
-
-  /**
-   * Check if player position has changed significantly enough to warrant recalculation
-   */
-  private shouldRecalculate(playerPosition: { x: number; y: number; z: number }): boolean {
-    if (!this.lastPlayerPosition) {
-      return true; // First check
+        id: room.id,
+        maxX: room.position.x + halfSize,
+        maxY: 4,
+        maxZ: room.position.z + halfSize,
+        minX: room.position.x - halfSize,
+        minY: -2,
+        minZ: room.position.z - halfSize,
+        size: roomSize,
+      });
     }
-
-    const dx = playerPosition.x - this.lastPlayerPosition.x;
-    const dz = playerPosition.z - this.lastPlayerPosition.z;
-    const distance = Math.sqrt(dx * dx + dz * dz);
-    
-    return distance >= this.detectionThreshold;
+    this.clearCurrentRoom();
   }
 
-  /**
-   * Find which room the player is currently in
-   */
   detectCurrentRoom(playerPosition: { x: number; y: number; z: number }): string | null {
-    if (!this.detectionEnabled) {
-      return this.currentRoomId;
-    }
-
-    // Only recalculate if player has moved significantly
-    if (!this.shouldRecalculate(playerPosition)) {
-      return this.currentRoomId;
-    }
-
+    if (!this.detectionEnabled) return this.currentRoomId;
+    if (!this.shouldRecalculate(playerPosition)) return this.currentRoomId;
     this.lastPlayerPosition = { ...playerPosition };
 
-    // Check each room's bounds
-    for (const [roomId, bounds] of this.roomBounds) {
-      if (
-        playerPosition.x >= bounds.minX &&
-        playerPosition.x <= bounds.maxX &&
-        playerPosition.z >= bounds.minZ &&
-        playerPosition.z <= bounds.maxZ &&
-        playerPosition.y >= bounds.minY &&
-        playerPosition.y <= bounds.maxY
-      ) {
-        if (this.currentRoomId !== roomId) {
-          // PlayerRoomDetection: Player entered room
-          this.currentRoomId = roomId;
-        }
-        return roomId;
-      }
-    }
-
-    // Player is not in any room
-    if (this.currentRoomId !== null) {
-      // PlayerRoomDetection: Player exited room
-      this.currentRoomId = null;
-    }
-
-    return null;
+    const detected = this.canonicalDungeon && this.canonicalIndex
+      ? detectDungeonRoom(this.canonicalDungeon, this.canonicalIndex, playerPosition)
+      : this.detectLegacyRoom(playerPosition);
+    this.currentRoomId = detected;
+    return detected;
   }
 
-  /**
-   * Get current room ID without triggering detection
-   */
   getCurrentRoomId(): string | null {
     return this.currentRoomId;
   }
 
-  /**
-   * Get room bounds for a specific room
-   */
   getRoomBounds(roomId: string): RoomBounds | undefined {
     return this.roomBounds.get(roomId);
   }
 
-  /**
-   * Get all room bounds
-   */
   getAllRoomBounds(): Map<string, RoomBounds> {
     return new Map(this.roomBounds);
   }
 
-  /**
-   * Enable/disable detection
-   */
   setDetectionEnabled(enabled: boolean): void {
     this.detectionEnabled = enabled;
   }
 
-  /**
-   * Check if detection is enabled
-   */
   isDetectionEnabled(): boolean {
     return this.detectionEnabled;
   }
 
-  /**
-   * Set detection threshold
-   */
   setDetectionThreshold(threshold: number): void {
+    if (!Number.isFinite(threshold) || threshold < 0) {
+      throw new Error("Room detection threshold must be a finite non-negative number");
+    }
     this.detectionThreshold = threshold;
   }
 
-  /**
-   * Clear current room state
-   */
   clearCurrentRoom(): void {
     this.currentRoomId = null;
     this.lastPlayerPosition = null;
   }
 
-  /**
-   * Get debug info about current state
-   */
+  clearDungeon(): void {
+    this.canonicalDungeon = null;
+    this.canonicalIndex = null;
+    this.roomBounds.clear();
+    this.clearCurrentRoom();
+  }
+
   getDebugInfo(): {
+    canonical: boolean;
     currentRoomId: string | null;
     lastPlayerPosition: { x: number; y: number; z: number } | null;
     detectionThreshold: number;
@@ -168,14 +143,38 @@ export class PlayerRoomDetection {
     roomCount: number;
   } {
     return {
+      canonical: this.canonicalDungeon !== null,
       currentRoomId: this.currentRoomId,
-      lastPlayerPosition: this.lastPlayerPosition,
       detectionThreshold: this.detectionThreshold,
       isDetectionEnabled: this.detectionEnabled,
-      roomCount: this.roomBounds.size
+      lastPlayerPosition: this.lastPlayerPosition,
+      roomCount: this.roomBounds.size,
     };
+  }
+
+  private shouldRecalculate(playerPosition: { x: number; y: number; z: number }): boolean {
+    if (!this.lastPlayerPosition) return true;
+    const dx = playerPosition.x - this.lastPlayerPosition.x;
+    const dy = playerPosition.y - this.lastPlayerPosition.y;
+    const dz = playerPosition.z - this.lastPlayerPosition.z;
+    return Math.sqrt(dx * dx + dy * dy + dz * dz) >= this.detectionThreshold;
+  }
+
+  private detectLegacyRoom(playerPosition: { x: number; y: number; z: number }): string | null {
+    for (const [roomId, bounds] of this.roomBounds) {
+      if (
+        playerPosition.x >= bounds.minX
+        && playerPosition.x <= bounds.maxX
+        && playerPosition.z >= bounds.minZ
+        && playerPosition.z <= bounds.maxZ
+        && playerPosition.y >= bounds.minY
+        && playerPosition.y <= bounds.maxY
+      ) {
+        return roomId;
+      }
+    }
+    return null;
   }
 }
 
-// Singleton instance
 export const playerRoomDetection = new PlayerRoomDetection();

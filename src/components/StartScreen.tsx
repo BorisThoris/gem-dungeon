@@ -17,6 +17,8 @@ import useGameStore from "../store/gameStore";
 import { domUIManager } from "../utils/domUIManager";
 import { uiEvents, UI_EVENTS } from "../utils/uiEvents";
 import GameInitializer from "./GameInitializer";
+import { canonicalDungeonToGeometry } from "../adapters/canonicalGeometryAdapter";
+import useMapStore from "../store/mapStore";
 
 // First-person controls handled by FirstPersonPlayer component
 
@@ -60,6 +62,12 @@ const SafetyFloor: React.FC = () => {
 
 // Main Scene Component
 const GhostScene: React.FC = () => {
+  const currentDungeon = useMapStore((state) => state.currentDungeon);
+  const canonicalSpawn = React.useMemo<[number, number, number]>(() => {
+    if (!currentDungeon) return [0, 1.5, 0];
+    const spawn = canonicalDungeonToGeometry(currentDungeon).spawn;
+    return [spawn.x, spawn.y, spawn.z];
+  }, [currentDungeon]);
   // Mount centralized camera controller to handle programmatic rotations
   useCameraController();
   return (
@@ -81,16 +89,20 @@ const GhostScene: React.FC = () => {
       {/* Physics World */}
       <Physics timeStep="vary" gravity={[0, -9.81, 0]}>
         {/* Safe Spawn Area */}
-        <SafeSpawnArea position={[0, 0, 0]} size={8} />
+        {!currentDungeon && <SafeSpawnArea position={[0, 0, 0]} size={8} />}
 
         {/* Safe First Person Player */}
-        <Player initialSpawnPosition={[0, 1.5, 0]} showDebugInfo={false} />
+        <Player
+          initialSpawnPosition={canonicalSpawn}
+          key={currentDungeon?.replay.spatialHash ?? "legacy-player"}
+          showDebugInfo={false}
+        />
 
         {/* Room Instance Manager - Single room at a time */}
-        <UnifiedRoomManager mode="instance" />
+        <UnifiedRoomManager mode={currentDungeon ? "canonical" : "instance"} />
 
         {/* Ground */}
-        <Ground />
+        {!currentDungeon && <Ground />}
 
         {/* Safety catch floor (invisible) */}
         <SafetyFloor />

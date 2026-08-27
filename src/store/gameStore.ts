@@ -9,7 +9,7 @@ export interface PlayerDimensions {
   capsuleHeight: number; // Height for capsule collider
 }
 
-interface PlayerStats {
+export interface PlayerStats {
   lives: number;
   maxLives: number;
   level: number;
@@ -38,7 +38,7 @@ interface PlayerStats {
   };
 }
 
-interface GameState {
+export interface GameState {
   playerStats: PlayerStats;
   inventory: Item[];
   isPreviewing: boolean;
@@ -51,6 +51,18 @@ interface GameState {
   totalScore: number;
   gamePhase: 'exploration' | 'puzzle' | 'boss';
 }
+
+export type PersistedGameState = Pick<
+  GameState,
+  | 'playerStats'
+  | 'inventory'
+  | 'currentRoomId'
+  | 'discoveredSecrets'
+  | 'completedRooms'
+  | 'currentFloor'
+  | 'totalScore'
+  | 'gamePhase'
+>;
 
 interface GameActions {
   // Player stats
@@ -95,6 +107,7 @@ interface GameActions {
   advanceFloor: () => void;
   addScore: (points: number) => void;
   setGamePhase: (phase: GameState['gamePhase']) => void;
+  restoreGameState: (state: PersistedGameState) => void;
   
   resetGame: () => void;
 }
@@ -525,6 +538,26 @@ const useGameStore = create<GameState & GameActions>((set, get) => ({
 
   setGamePhase: (phase) => {
     set({ gamePhase: phase });
+  },
+
+  restoreGameState: (state) => {
+    set({
+      completedRooms: [...state.completedRooms],
+      currentFloor: state.currentFloor,
+      currentRoomId: state.currentRoomId,
+      discoveredSecrets: [...state.discoveredSecrets],
+      gamePhase: state.gamePhase,
+      inventory: state.inventory.map((item) => ({
+        ...item,
+        effects: item.effects.map((effect) => ({ ...effect })),
+      })),
+      playerStats: {
+        ...state.playerStats,
+        buffs: { ...state.playerStats.buffs },
+        dimensions: { ...state.playerStats.dimensions },
+      },
+      totalScore: state.totalScore,
+    });
   },
 
   resetGame: () => {

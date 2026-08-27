@@ -1,3 +1,10 @@
+import type {
+  Dungeon,
+  DungeonRunState,
+  GenerationDiagnostics,
+  Seed,
+} from "../dungeon-core/types";
+
 export interface Position {
   x: number;
   z: number;
@@ -189,15 +196,24 @@ export interface GameMap {
 }
 
 export interface MapState {
+  currentDungeon: Dungeon | null;
   currentMap: GameMap | null;
   currentRoomId: string | null;
+  dungeonRunState: DungeonRunState | null;
+  generationDiagnostics: GenerationDiagnostics | null;
   visitedRooms: Set<string>;
   isGenerating: boolean;
   error: string | null;
 }
 
 export interface MapActions {
-  generateMap: (config?: Partial<MapConfig>, enabledBiomeCategories?: string[]) => void;
+  generateMap: (
+    config?: Partial<MapConfig>,
+    enabledBiomeCategories?: string[],
+    seed?: Seed,
+  ) => void;
+  restoreDungeon: (dungeon: Dungeon, runState?: DungeonRunState) => void;
+  openConnection: (connectionId: string) => void;
   setCurrentRoom: (roomId: string) => void;
   markRoomVisited: (roomId: string) => void;
   clearMap: () => void;

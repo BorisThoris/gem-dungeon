@@ -76,6 +76,7 @@ export function validateDungeon(dungeon: DungeonValidationInput): ValidationRepo
 
   validateKeyAvailability(dungeon, issues);
   validateProgressionBypass(dungeon, roomById, issues);
+  validateCorridorJunctionBypass(dungeon, roomById, issues);
   const stateReachability = progressionReachability(dungeon, roomById);
   const missingProgression = mandatoryRoomIds.filter(
     (id) => !stateReachability.reachableRooms.has(id),
@@ -129,6 +130,7 @@ export function validateDungeon(dungeon: DungeonValidationInput): ValidationRepo
     valid: !sortedIssues.some((issue) => issue.severity === "error"),
   };
 }
+
 
 function validateSpecialRooms(
   dungeon: DungeonValidationInput,
@@ -536,6 +538,77 @@ function validateProgressionBypass(
   }
 }
 
+interface CorridorEndpoint {
+  readonly connection: DungeonConnection;
+  readonly inward: boolean;
+  readonly outward: boolean;
+  readonly roomId: string;
+}
+
+interface CorridorComponent {
+  readonly connectionIds: ReadonlySet<string>;
+  readonly endpoints: readonly CorridorEndpoint[];
+}
+
+function validateCorridorJunctionBypass(
+  dungeon: DungeonValidationInput,
+  roomById: ReadonlyMap<string, DungeonRoom>,
+  issues: ValidationIssue[],
+): void {
+  const gates = dungeon.connections
+    .filter((connection) => connection.mandatory
+      && (connection.traversal.requiredFlags.length > 0
+        || connection.traversal.requiredItems.length > 0))
+    .map((connection) => ({
+      connection,
+      depth: Math.max(
+        roomById.get(connection.from.roomId)?.progressionDepth ?? 0,
+        roomById.get(connection.to.roomId)?.progressionDepth ?? 0,
+      ),
+    }));
+  const reported = new Set<string>();
+  for (const component of corridorComponents(dungeon.connections)) {
+    if (component.connectionIds.size < 2) continue;
+    for (const entry of component.endpoints.filter((endpoint) => endpoint.outward)) {
+      for (const exit of component.endpoints.filter((endpoint) => endpoint.inward)) {
+        if (entry.roomId === exit.roomId || entry.connection.id === exit.connection.id) continue;
+        const entryDepth = roomById.get(entry.roomId)?.progressionDepth ?? 0;
+        const exitDepth = roomById.get(exit.roomId)?.progressionDepth ?? 0;
+        const minimum = Math.min(entryDepth, exitDepth);
+        const maximum = Math.max(entryDepth, exitDepth);
+        const routeItems = new Set([
+          ...entry.connection.traversal.requiredItems,
+          ...exit.connection.traversal.requiredItems,
+        ]);
+        const routeFlags = new Set([
+          ...entry.connection.traversal.requiredFlags,
+          ...exit.connection.traversal.requiredFlags,
+        ]);
+        for (const gate of gates.filter((candidate) =>
+          candidate.depth > minimum && candidate.depth <= maximum)) {
+          const protectedByItems = gate.connection.traversal.requiredItems.every((item) =>
+            routeItems.has(item));
+          const protectedByFlags = gate.connection.traversal.requiredFlags.every((flag) =>
+            routeFlags.has(flag));
+          if (protectedByItems && protectedByFlags) continue;
+          const reportKey = [
+            componentKey(component),
+            gate.connection.id,
+          ].join("|");
+          if (reported.has(reportKey)) continue;
+          reported.add(reportKey);
+          issues.push({
+            code: "CORRIDOR_JUNCTION_PROGRESSION_BYPASS",
+            connectionId: exit.connection.id,
+            message: `Shared corridor network lets ${entry.roomId} reach ${exit.roomId} around mandatory gate ${gate.connection.id}`,
+            severity: "error",
+          });
+        }
+      }
+    }
+  }
+}
+
 function progressionReachability(
   dungeon: DungeonValidationInput,
   roomById: ReadonlyMap<string, DungeonRoom>,
@@ -543,6 +616,7 @@ function progressionReachability(
   const start = roomById.get(dungeon.startRoomId);
   if (!start) return { reachableRooms: new Set() };
   const initial = collectGrants(new Set(), new Set(), start);
+  const corridorNetwork = corridorComponents(dungeon.connections);
   const queue = [{ flags: initial.flags, inventory: initial.inventory, roomId: start.id }];
   const visited = new Set<string>();
   const reachableRooms = new Set<string>();
@@ -552,7 +626,7 @@ function progressionReachability(
     if (visited.has(stateKey)) continue;
     visited.add(stateKey);
     reachableRooms.add(state.roomId);
-    for (const connection of dungeon.connections) {
+    for (const connection of dungeon.connections.filter((candidate) => !candidate.corridor)) {
       const targetId = traversalTarget(connection, state.roomId);
       if (!targetId || !requirementsMet(connection, state.inventory, state.flags)) continue;
       const target = roomById.get(targetId);
@@ -563,8 +637,103 @@ function progressionReachability(
         queue.push({ ...collected, roomId: target.id });
       }
     }
+    for (const targetId of corridorTraversalTargets(
+      corridorNetwork,
+      state.roomId,
+      state.inventory,
+      state.flags,
+    )) {
+      const target = roomById.get(targetId);
+      if (!target) continue;
+      const collected = collectGrants(state.inventory, state.flags, target);
+      const nextKey = progressionStateKey(target.id, collected.inventory, collected.flags);
+      if (!visited.has(nextKey)) queue.push({ ...collected, roomId: target.id });
+    }
   }
   return { reachableRooms };
+}
+
+function corridorTraversalTargets(
+  components: readonly CorridorComponent[],
+  roomId: string,
+  inventory: ReadonlySet<string>,
+  flags: ReadonlySet<string>,
+): ReadonlySet<string> {
+  const targets = new Set<string>();
+  for (const component of components) {
+    const canEnter = component.endpoints.some((endpoint) =>
+      endpoint.roomId === roomId
+      && endpoint.outward
+      && requirementsMet(endpoint.connection, inventory, flags));
+    if (!canEnter) continue;
+    for (const endpoint of component.endpoints) {
+      if (
+        endpoint.roomId !== roomId
+        && endpoint.inward
+        && requirementsMet(endpoint.connection, inventory, flags)
+      ) targets.add(endpoint.roomId);
+    }
+  }
+  return targets;
+}
+
+function corridorComponents(
+  connections: readonly DungeonConnection[],
+): readonly CorridorComponent[] {
+  const routed = connections.filter((connection) => connection.corridor !== null);
+  const parent = new Map(routed.map((connection) => [connection.id, connection.id]));
+  const ownerByCell = new Map<string, string>();
+  const find = (id: string): string => {
+    const current = parent.get(id)!;
+    if (current === id) return id;
+    const root = find(current);
+    parent.set(id, root);
+    return root;
+  };
+  const union = (left: string, right: string) => {
+    const leftRoot = find(left);
+    const rightRoot = find(right);
+    if (leftRoot !== rightRoot) {
+      const [first, second] = [leftRoot, rightRoot].sort();
+      parent.set(second, first);
+    }
+  };
+  for (const connection of routed) {
+    for (const cell of connection.corridor!.cells) {
+      const key = cellKey(cell);
+      const owner = ownerByCell.get(key);
+      if (owner) union(owner, connection.id);
+      else ownerByCell.set(key, connection.id);
+    }
+  }
+  const grouped = new Map<string, DungeonConnection[]>();
+  for (const connection of routed) {
+    const root = find(connection.id);
+    const group = grouped.get(root) ?? [];
+    group.push(connection);
+    grouped.set(root, group);
+  }
+  return [...grouped.values()].map((group) => ({
+    connectionIds: new Set(group.map((connection) => connection.id)),
+    endpoints: group.flatMap((connection): CorridorEndpoint[] => [
+      {
+        connection,
+        inward: connection.traversal.direction !== "from-to",
+        outward: connection.traversal.direction !== "to-from",
+        roomId: connection.from.roomId,
+      },
+      {
+        connection,
+        inward: connection.traversal.direction !== "to-from",
+        outward: connection.traversal.direction !== "from-to",
+        roomId: connection.to.roomId,
+      },
+    ]),
+  }));
+}
+
+function componentKey(component: CorridorComponent): string {
+  return [...component.connectionIds].sort().join(",");
 }
 
 function traversalTarget(connection: DungeonConnection, roomId: string): string | null {

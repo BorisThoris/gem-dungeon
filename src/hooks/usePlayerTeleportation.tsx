@@ -1,120 +1,49 @@
-import { useRef, useCallback } from "react";
+import { useEffect, type RefObject } from "react";
 import { useThree } from "@react-three/fiber";
-import { RapierRigidBody } from "@react-three/rapier";
+import type { RapierRigidBody } from "@react-three/rapier";
 import * as THREE from "three";
 
-interface TeleportationState {
-  isTeleporting: boolean;
-  targetPosition: THREE.Vector3 | null;
-  targetRotation: THREE.Euler | null;
+interface PlayerTeleportDetail {
+  readonly position: readonly [number, number, number];
+  readonly rotation?: readonly [number, number, number];
 }
 
-export const usePlayerTeleportation = () => {
+interface UsePlayerTeleportationProps {
+  readonly rigidBodyRef: RefObject<RapierRigidBody | null>;
+}
+
+export const usePlayerTeleportation = ({
+  rigidBodyRef,
+}: UsePlayerTeleportationProps): void => {
   const { camera } = useThree();
-  const playerRef = useRef<RapierRigidBody | null>(null);
-  const teleportationState = useRef<TeleportationState>({
-    isTeleporting: false,
-    targetPosition: null,
-    targetRotation: null,
-  });
 
-  // Set the player rigid body reference
-  const setPlayerRef = useCallback((ref: RapierRigidBody | null) => {
-    playerRef.current = ref;
-  }, []);
-
-  // Calculate entrance position based on door direction
-  const calculateEntrancePosition = useCallback(
-    (
-      roomSize: number,
-      direction: "north" | "south" | "east" | "west"
-    ): { position: THREE.Vector3; rotation: THREE.Euler } => {
-      const entranceDistance = 2; // Distance from door to spawn player
-
-      let position: THREE.Vector3;
-      let rotation: THREE.Euler;
-
-      switch (direction) {
-        case "north":
-          position = new THREE.Vector3(0, 1, -roomSize / 2 + entranceDistance);
-          rotation = new THREE.Euler(0, 0, 0); // Face south (into room)
-          break;
-        case "south":
-          position = new THREE.Vector3(0, 1, roomSize / 2 - entranceDistance);
-          rotation = new THREE.Euler(0, Math.PI, 0); // Face north (into room)
-          break;
-        case "east":
-          position = new THREE.Vector3(roomSize / 2 - entranceDistance, 1, 0);
-          rotation = new THREE.Euler(0, -Math.PI / 2, 0); // Face west (into room)
-          break;
-        case "west":
-          position = new THREE.Vector3(-roomSize / 2 + entranceDistance, 1, 0);
-          rotation = new THREE.Euler(0, Math.PI / 2, 0); // Face east (into room)
-          break;
-        default:
-          position = new THREE.Vector3(0, 1, roomSize / 2 - entranceDistance);
-          rotation = new THREE.Euler(0, Math.PI, 0);
-      }
-
-      return { position, rotation };
-    },
-    []
-  );
-
-  // Teleport player to entrance position
-  const teleportToEntrance = useCallback(
-    (roomSize: number, direction: "north" | "south" | "east" | "west") => {
-      if (!playerRef.current) {
-        // Player ref not set, cannot teleport
-        return;
-      }
-
-      const { position, rotation } = calculateEntrancePosition(
-        roomSize,
-        direction
+  useEffect(() => {
+    const handleTeleport = (rawEvent: Event) => {
+      const event = rawEvent as CustomEvent<PlayerTeleportDetail>;
+      const position = event.detail?.position;
+      if (!isVectorTuple(position) || !rigidBodyRef.current) return;
+      const rotation = isVectorTuple(event.detail.rotation)
+        ? event.detail.rotation
+        : [0, camera.rotation.y, 0] as const;
+      const body = rigidBodyRef.current;
+      body.setTranslation(
+        { x: position[0], y: position[1], z: position[2] },
+        true,
       );
-
-      // Teleporting player to entrance
-
-      // Set teleportation state
-      teleportationState.current = {
-        isTeleporting: true,
-        targetPosition: position.clone(),
-        targetRotation: rotation.clone(),
-      };
-
-      // Teleport the rigid body
-      playerRef.current.setTranslation(position, true);
-      playerRef.current.setRotation(rotation, true);
-
-      // Stop any existing velocity
-      playerRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
-      playerRef.current.setAngvel({ x: 0, y: 0, z: 0 }, true);
-
-      // Update camera position and rotation
-      camera.position.copy(position);
-      camera.position.y += 1.6; // Eye level offset
-      camera.rotation.copy(rotation);
+      body.setLinvel({ x: 0, y: 0, z: 0 }, true);
+      body.setAngvel({ x: 0, y: 0, z: 0 }, true);
+      camera.position.set(position[0], position[1] + 1.6, position[2]);
+      camera.rotation.copy(new THREE.Euler(rotation[0], rotation[1], rotation[2]));
       camera.updateMatrixWorld(true);
+    };
 
-      // Mark teleportation as complete
-      setTimeout(() => {
-        teleportationState.current.isTeleporting = false;
-        teleportationState.current.targetPosition = null;
-        teleportationState.current.targetRotation = null;
-      }, 100);
-    },
-    [camera, calculateEntrancePosition]
-  );
-
-  // Get current teleportation state
-  const getTeleportationState = useCallback(() => {
-    return teleportationState.current;
-  }, []);
-
-  return {
-    setPlayerRef,
-    teleportToEntrance,
-    getTeleportationState,
-  };
+    window.addEventListener("playerTeleport", handleTeleport);
+    return () => window.removeEventListener("playerTeleport", handleTeleport);
+  }, [camera, rigidBodyRef]);
 };
+
+function isVectorTuple(value: unknown): value is readonly [number, number, number] {
+  return Array.isArray(value)
+    && value.length >= 3
+    && value.slice(0, 3).every((entry) => typeof entry === "number" && Number.isFinite(entry));
+}
