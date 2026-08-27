@@ -24,8 +24,8 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
-    // Optimize for Electron
-    target: 'esnext',
+    // Kinhank X5 Pro ships Chrome 79; keep the public build compatible with it.
+    target: ['chrome79', 'es2019'],
     minify: 'terser',
     terserOptions: {
       compress: {

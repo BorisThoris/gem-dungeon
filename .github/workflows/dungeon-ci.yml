@@ -1,0 +1,37 @@
+name: Dungeon CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dungeon-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          cache: yarn
+          node-version: 22
+      - run: yarn install --frozen-lockfile
+      - run: yarn typecheck:dungeon
+      - run: yarn test --maxWorkers=2
+      - run: yarn test:dungeon:sweep
+      - run: yarn build
+      - run: yarn lint
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          if-no-files-found: ignore
+          name: bounded-dungeon-sweep
+          path: artifacts/dungeon-sweep.json
+          retention-days: 14

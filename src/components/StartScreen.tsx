@@ -113,6 +113,9 @@ const GhostScene: React.FC = () => {
 
 const StartScreenContent: React.FC = () => {
   const { inventory, useItem: consumeItem } = useGameStore();
+  const currentDungeon = useMapStore((state) => state.currentDungeon);
+  const currentMap = useMapStore((state) => state.currentMap);
+  const currentRoomId = useMapStore((state) => state.currentRoomId);
   const [isPaused, setIsPaused] = React.useState(false);
 
   // Initialize DOM UI manager
@@ -131,6 +134,15 @@ const StartScreenContent: React.FC = () => {
       domUIManager.destroy();
     };
   }, [consumeItem]);
+
+  React.useEffect(() => {
+    const canonicalRoom = currentDungeon?.rooms.find((room) => room.id === currentRoomId);
+    const legacyRoom = currentMap?.rooms.find((room) => room.id === currentRoomId);
+    uiEvents.emit(
+      UI_EVENTS.ROOM_CHANGE,
+      canonicalRoom?.archetype ?? legacyRoom?.type ?? currentRoomId ?? "Unknown",
+    );
+  }, [currentDungeon, currentMap, currentRoomId]);
 
   // Update UI when inventory changes (throttled)
   React.useEffect(() => {

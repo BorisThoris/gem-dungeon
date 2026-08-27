@@ -8,6 +8,7 @@ class DOMUIManager {
   private gameUI: HTMLElement | null = null;
   private instructions: HTMLElement | null = null;
   private isInitialized = false;
+  private currentRoomName = 'Unknown';
   private updateInterval: number | null = null;
   private unsubs: Array<() => void> = [];
 
@@ -164,6 +165,7 @@ class DOMUIManager {
         Room: <span id="current-room">Unknown</span>
       </div>
     `;
+    this.renderCurrentRoom();
   }
 
   private updateInventory(inventory: any[]) {
@@ -185,9 +187,14 @@ class DOMUIManager {
   }
 
   private updateCurrentRoom(roomName: string) {
+    this.currentRoomName = roomName;
+    this.renderCurrentRoom();
+  }
+
+  private renderCurrentRoom() {
     const currentRoomElement = document.getElementById('current-room');
     if (currentRoomElement) {
-      currentRoomElement.textContent = roomName;
+      currentRoomElement.textContent = this.currentRoomName;
     }
   }
 
@@ -217,6 +224,7 @@ class DOMUIManager {
       this.instructions = null;
     }
     this.isInitialized = false;
+    this.currentRoomName = 'Unknown';
   }
 }
 

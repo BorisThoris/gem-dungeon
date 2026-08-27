@@ -39,6 +39,53 @@ yarn generate-config # Generate configuration
 yarn generate-assets # Generate assets
 yarn generate-textures # Generate textures
 yarn scan-components # Scan components
+
+# Canonical dungeon compiler
+yarn typecheck:dungeon # Type-check the UI-free core
+yarn test:dungeon # Core unit and regression tests
+yarn test:dungeon:property # fast-check invariants
+yarn test:dungeon:sweep # Bounded deterministic validation cohort
+yarn analyze:dungeon # Expressive-range JSON report
+yarn benchmark:dungeon:techniques # Baseline vs valid best-of-N experiment
+yarn test:browser:cdp --endpoint http://127.0.0.1:9222 --url-prefix http://127.0.0.1:4173
+```
+
+### Canonical Dungeon Workflow
+
+All gameplay topology and geometry changes begin in `src/dungeon-core`. Keep UI,
+Three.js, Rapier, Zustand, Electron, DOM, and browser globals outside that
+directory. Consumers belong in adapters and must derive from the immutable
+`Dungeon`; mutable exploration data belongs in `DungeonRunState`.
+
+See [`docs/dungeon-core.md`](docs/dungeon-core.md) for the public API,
+serialization, runtime adapters, and the texture/3D asset-anchor boundary. A
+failure must remain reproducible and structured: add its seed to `tests/seeds`
+and fix the responsible stage rather than inventing a graph-only repair.
+
+### Authorized Android Chrome Smoke
+
+Only target a device that the owner explicitly authorized, and use its exact
+serial on every `adb` command. The production bundle targets Chrome 79 as the
+oldest currently verified Android browser baseline.
+
+Build the app, start `yarn preview --host 127.0.0.1 --port 4173` in another
+terminal, then run this PowerShell workflow:
+
+```powershell
+$authorizedDevice = 'replace-with-authorized-device-serial'
+adb -s $authorizedDevice reverse tcp:4173 tcp:4173
+adb -s $authorizedDevice shell am start -a android.intent.action.VIEW -d http://127.0.0.1:4173 com.android.chrome
+adb -s $authorizedDevice forward tcp:9222 localabstract:chrome_devtools_remote
+yarn test:browser:cdp --endpoint http://127.0.0.1:9222 --url-prefix http://127.0.0.1:4173 --wait-ms 60000 --expect-canvas --expect-text "Room: start"
+```
+
+The smoke test fails on page exceptions, console errors/assertions, an
+incomplete document, or unmet DOM expectations. Clean up using the same exact
+serial:
+
+```powershell
+adb -s $authorizedDevice reverse --remove tcp:4173
+adb -s $authorizedDevice forward --remove tcp:9222
 ```
 
 ## Project Structure

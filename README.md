@@ -14,6 +14,9 @@ This repository is a portfolio-ready 3D application project rather than a small 
 - Breakable/destructible object components and reusable primitive room elements.
 - Zustand stores for game, map, room, door progression, and initialization state.
 - Texture generation, preset texture libraries, texture painting, and mosaic creation tools.
+- A deterministic canonical dungeon core with graph-first progression, exact
+  footprints, physical sockets/corridors, multi-floor traversal, validation,
+  metrics, and versioned serialization.
 - URL-parameter driven modes for editor, room builder, texture painter, mosaic creator, and debug screens.
 - Electron desktop shell and installer configuration.
 
@@ -71,7 +74,25 @@ yarn electron-pack
 yarn electron-dist
 yarn generate-assets
 yarn generate-textures
+yarn typecheck:dungeon
+yarn test:dungeon
+yarn test:dungeon:sweep
+yarn analyze:dungeon
+yarn benchmark:dungeon:techniques
 ```
+
+## Canonical Dungeon Generation
+
+`src/dungeon-core` is a UI-free TypeScript compiler from seed/config/templates to
+one immutable `Dungeon`. Runtime rendering, Rapier collision, minimap, room
+detection, progression state, and save/load derive from that model through
+adapters. Start with [the core and asset-adapter contract](docs/dungeon-core.md);
+the [advanced-technique evaluation](docs/advanced-generation-evaluation.md)
+records why WFC and heavyweight solvers are not in the global production path.
+
+Texture and model authoring remain separate tools. They can consume stable
+canonical material keys and room asset anchors, but visual generation never
+changes canonical gameplay geometry.
 
 ## Desktop Packaging
 
