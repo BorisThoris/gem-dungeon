@@ -1,0 +1,6 @@
+{
+  "category": "portals",
+  "cases": [
+    { "seed": "regression-portals-001", "stage": "semantics" }
+  ]
+}

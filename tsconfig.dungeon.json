@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.dungeon.tsbuildinfo",
+    "types": ["node", "vite/client", "vitest/globals"]
+  },
+  "include": ["src/dungeon-core/**/*.ts"],
+  "exclude": []
+}

@@ -1,0 +1,6 @@
+{
+  "category": "sockets",
+  "cases": [
+    { "seed": "regression-sockets-001", "stage": "routing" }
+  ]
+}

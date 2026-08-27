@@ -1,0 +1,6 @@
+{
+  "category": "routing",
+  "cases": [
+    { "seed": 0, "stage": "routing" }
+  ]
+}

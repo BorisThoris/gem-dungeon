@@ -1,0 +1,6 @@
+{
+  "category": "overlap",
+  "cases": [
+    { "seed": "regression-overlap-001", "stage": "placement" }
+  ]
+}

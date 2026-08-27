@@ -1,0 +1,10 @@
+{
+  "category": "vertical",
+  "cases": [
+    {
+      "seed": "regression-vertical-001",
+      "stage": "routing",
+      "config": { "world": { "floors": 3 } }
+    }
+  ]
+}
