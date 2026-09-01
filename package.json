@@ -1,5 +1,7 @@
 {
     "name": "threejs-gem-dungeon-editor",
+    "packageManager": "yarn@1.22.22",
+
     "private": true,
     "version": "1.0.0",
     "type": "module",
