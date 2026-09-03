@@ -1,0 +1,158 @@
+{
+  "$schema": "./scripts/project.meta.schema.json",
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-03T20:39:14.128Z",
+  "generatedBy": "scripts/generate-project-meta.mjs",
+  "identity": {
+    "slug": "gem-dungeon-editor-epic-1",
+    "repoName": "gem-dungeon-epic-1",
+    "packageName": "threejs-gem-dungeon-editor",
+    "version": "1.0.0",
+    "title": "ThreeJS Gem Dungeon Editor (epic-1)",
+    "subtitle": "Feature-branch copy of the dungeon editor",
+    "description": "An epic-1 feature checkout of the React Three Fiber dungeon crawler and editor.",
+    "tags": [
+      "React Three Fiber",
+      "Three.js",
+      "Electron"
+    ],
+    "accent": "#c084fc",
+    "classification": "duplicate",
+    "showcaseTier": "excluded",
+    "duplicateOf": "threejs-gem-dungeon-editor",
+    "excludedReason": "Feature-branch copy of the dungeon editor."
+  },
+  "links": {
+    "homepage": "./",
+    "repository": "https://github.com/BorisThoris/gem-dungeon"
+  },
+  "runtime": {
+    "packageManager": "yarn",
+    "scripts": [
+      "start",
+      "dev",
+      "build",
+      "lint",
+      "test",
+      "test:dungeon",
+      "test:dungeon:watch",
+      "test:dungeon:property",
+      "test:dungeon:sweep",
+      "test:dungeon:stress",
+      "analyze:dungeon",
+      "benchmark:dungeon:techniques",
+      "test:browser:cdp",
+      "typecheck:dungeon",
+      "preview",
+      "electron",
+      "electron-dev",
+      "electron-pack",
+      "electron-dist",
+      "generate-config",
+      "generate-assets",
+      "scan-components",
+      "generate-textures",
+      "meta",
+      "meta:check"
+    ]
+  },
+  "media": {
+    "source": "portfolio-capture-missing",
+    "directory": "C:/Users/Gaming PC/Desktop/Repos/portfolio/public/project-shots/gem-dungeon-editor-epic-1/latest"
+  },
+  "stack": {
+    "framework": "React Three Fiber",
+    "language": "TypeScript",
+    "runtimeTargets": [
+      "web",
+      "desktop-electron"
+    ],
+    "libraries": [
+      {
+        "name": "react",
+        "version": "^19.1.1"
+      },
+      {
+        "name": "react-dom",
+        "version": "^19.1.1"
+      },
+      {
+        "name": "zustand",
+        "version": "^5.0.8"
+      },
+      {
+        "name": "three",
+        "version": "^0.180.0"
+      },
+      {
+        "name": "@react-three/fiber",
+        "version": "^9.3.0"
+      },
+      {
+        "name": "@react-three/drei",
+        "version": "^10.7.6"
+      },
+      {
+        "name": "vite",
+        "version": "^5.4.20"
+      },
+      {
+        "name": "electron",
+        "version": "^38.1.2"
+      },
+      {
+        "name": "typescript",
+        "version": "~5.8.3"
+      }
+    ],
+    "testing": [
+      "vitest"
+    ],
+    "dependencyCount": 9,
+    "devDependencyCount": 32
+  },
+  "metrics": {
+    "sourceFiles": 384,
+    "testFiles": 27,
+    "sourceLines": 78318,
+    "largestDirectories": [
+      {
+        "directory": "src",
+        "files": 344
+      },
+      {
+        "directory": "scripts",
+        "files": 28
+      },
+      {
+        "directory": "assets",
+        "files": 4
+      },
+      {
+        "directory": ".",
+        "files": 4
+      },
+      {
+        "directory": "code_examples",
+        "files": 2
+      }
+    ],
+    "hasReadme": true,
+    "hasTests": true,
+    "hasCi": true,
+    "hasDocs": true
+  },
+  "analysisNotes": "Branch copy; ThreeJsGem-Fixed is the portfolio surface.",
+  "git": {
+    "branch": "codex/epic-1-canonical-dungeon",
+    "head": "4539bc9",
+    "lastCommitDate": "2026-09-01T17:18:00+03:00",
+    "lastCommitSubject": "fix(deploy): pin Yarn 1 so Cloudflare Pages installs cleanly",
+    "commitCount": 127,
+    "remote": "https://github.com/BorisThoris/gem-dungeon.git"
+  },
+  "readme": {
+    "file": "README.md",
+    "heading": "ThreeJS Gem Dungeon Editor"
+  }
+}
