@@ -32,7 +32,9 @@
         "generate-config": "node scripts/generate-config.js",
         "generate-assets": "node scripts/generate-assets.js",
         "scan-components": "yarn ts-node src/utils/componentScanner.ts",
-        "generate-textures": "node scripts/generate-textures.js"
+        "generate-textures": "node scripts/generate-textures.js",
+        "meta": "node scripts/generate-project-meta.mjs",
+        "meta:check": "node scripts/generate-project-meta.mjs --check"
     },
     "dependencies": {
         "@react-three/drei": "^10.7.6",
