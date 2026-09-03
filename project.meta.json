@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-03T20:39:14.128Z",
+  "generatedAt": "2026-09-03T20:45:37.233Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "gem-dungeon-editor-epic-1",
@@ -114,7 +114,7 @@
   "metrics": {
     "sourceFiles": 384,
     "testFiles": 27,
-    "sourceLines": 78318,
+    "sourceLines": 78321,
     "largestDirectories": [
       {
         "directory": "src",
@@ -145,10 +145,10 @@
   "analysisNotes": "Branch copy; ThreeJsGem-Fixed is the portfolio surface.",
   "git": {
     "branch": "codex/epic-1-canonical-dungeon",
-    "head": "4539bc9",
-    "lastCommitDate": "2026-09-01T17:18:00+03:00",
-    "lastCommitSubject": "fix(deploy): pin Yarn 1 so Cloudflare Pages installs cleanly",
-    "commitCount": 127,
+    "head": "6c0fa0b",
+    "lastCommitDate": "2026-09-03T23:44:38+03:00",
+    "lastCommitSubject": "Wire up the meta scripts",
+    "commitCount": 129,
     "remote": "https://github.com/BorisThoris/gem-dungeon.git"
   },
   "readme": {
