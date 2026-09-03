@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-03T20:45:37.233Z",
+  "generatedAt": "2026-09-03T21:50:36.982Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "gem-dungeon-editor-epic-1",
@@ -53,7 +53,10 @@
       "scan-components",
       "generate-textures",
       "meta",
-      "meta:check"
+      "meta:check",
+      "shots",
+      "social",
+      "social:check"
     ]
   },
   "media": {
@@ -112,9 +115,9 @@
     "devDependencyCount": 32
   },
   "metrics": {
-    "sourceFiles": 384,
+    "sourceFiles": 386,
     "testFiles": 27,
-    "sourceLines": 78321,
+    "sourceLines": 78764,
     "largestDirectories": [
       {
         "directory": "src",
@@ -122,7 +125,7 @@
       },
       {
         "directory": "scripts",
-        "files": 28
+        "files": 30
       },
       {
         "directory": "assets",
@@ -145,10 +148,10 @@
   "analysisNotes": "Branch copy; ThreeJsGem-Fixed is the portfolio surface.",
   "git": {
     "branch": "codex/epic-1-canonical-dungeon",
-    "head": "6c0fa0b",
-    "lastCommitDate": "2026-09-03T23:44:38+03:00",
-    "lastCommitSubject": "Wire up the meta scripts",
-    "commitCount": 129,
+    "head": "dd714d9",
+    "lastCommitDate": "2026-09-03T23:46:18+03:00",
+    "lastCommitSubject": "Refresh project metadata",
+    "commitCount": 130,
     "remote": "https://github.com/BorisThoris/gem-dungeon.git"
   },
   "readme": {
