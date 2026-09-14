@@ -247,10 +247,10 @@
   "analysisNotes": "React Three Fiber dungeon editor with procedural rooms, physics, a component browser and a clean Vite demo path; deployed from main.",
   "git": {
     "branch": "codex/epic-1-canonical-dungeon",
-    "head": "ce23452",
-    "lastCommitDate": "2026-09-14T23:28:15+03:00",
-    "lastCommitSubject": "Describe the deployed editor, add its preview card and icon set",
-    "commitCount": 133,
+    "head": "b84fc0f",
+    "lastCommitDate": "2026-09-14T23:48:50+03:00",
+    "lastCommitSubject": "Refresh the icon record after the toolkit's line-ending fix",
+    "commitCount": 134,
     "remote": "https://github.com/BorisThoris/gem-dungeon.git"
   },
   "readme": {
