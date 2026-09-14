@@ -1,11 +1,11 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-14T21:36:19.893Z",
+  "generatedAt": "2026-09-14T22:06:07.165Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "gem-dungeon",
-    "repoName": "gem-dungeon-epic-1",
+    "repoName": "gem-dungeon",
     "packageName": "threejs-gem-dungeon-editor",
     "version": "1.0.0",
     "title": "Gem Dungeon Editor",
@@ -208,7 +208,7 @@
   "metrics": {
     "sourceFiles": 388,
     "testFiles": 27,
-    "sourceLines": 79330,
+    "sourceLines": 79339,
     "largestDirectories": [
       {
         "directory": "src",
@@ -247,10 +247,10 @@
   "analysisNotes": "React Three Fiber dungeon editor with procedural rooms, physics, a component browser and a clean Vite demo path; deployed from main.",
   "git": {
     "branch": "codex/epic-1-canonical-dungeon",
-    "head": "ce8cfb0",
-    "lastCommitDate": "2026-09-14T23:58:19+03:00",
-    "lastCommitSubject": "Sync the metadata toolkit scripts and regenerate project.meta.json",
-    "commitCount": 135,
+    "head": "7ee3c9d",
+    "lastCommitDate": "2026-09-15T00:39:46+03:00",
+    "lastCommitSubject": "Gate pushes on a current link-preview card and icon set",
+    "commitCount": 136,
     "remote": "https://github.com/BorisThoris/gem-dungeon.git"
   },
   "readme": {
