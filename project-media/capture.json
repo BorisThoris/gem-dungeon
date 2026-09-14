@@ -1,0 +1,83 @@
+{
+  "slug": "gem-dungeon",
+  "capturedAt": "2026-09-14T20:21:41.804Z",
+  "source": "deployment",
+  "url": "https://gem-dungeon-git.pages.dev/",
+  "recipe": {
+    "route": "/",
+    "actions": [
+      {
+        "type": "waitFor",
+        "target": {
+          "selector": "canvas"
+        },
+        "state": "visible",
+        "label": "wait for the loaded 3D scene"
+      },
+      {
+        "type": "click",
+        "target": {
+          "role": "button",
+          "name": "3D Editor"
+        },
+        "label": "open the 3D editor tab"
+      },
+      {
+        "type": "wait",
+        "ms": 3000,
+        "label": "let the editor scene load"
+      },
+      {
+        "type": "uncheck",
+        "target": {
+          "role": "checkbox",
+          "name": "Show Player State"
+        },
+        "label": "hide the player-state overlay"
+      }
+    ],
+    "waitAfterReadyMs": 1500
+  },
+  "profiles": [
+    {
+      "profile": "card",
+      "file": "card.jpg",
+      "width": 1600,
+      "height": 900,
+      "bytes": 92680,
+      "status": "captured"
+    },
+    {
+      "profile": "desktop",
+      "file": "desktop.jpg",
+      "width": 1440,
+      "height": 900,
+      "bytes": 90915,
+      "status": "captured"
+    },
+    {
+      "profile": "mobile",
+      "file": "mobile.jpg",
+      "width": 430,
+      "height": 932,
+      "bytes": 33327,
+      "status": "captured"
+    },
+    {
+      "profile": "full",
+      "file": "full.jpg",
+      "width": 1440,
+      "height": 900,
+      "bytes": 78773,
+      "status": "captured"
+    },
+    {
+      "profile": "og",
+      "file": "og.jpg",
+      "width": 1200,
+      "height": 630,
+      "bytes": 75627,
+      "status": "captured"
+    }
+  ]
+}

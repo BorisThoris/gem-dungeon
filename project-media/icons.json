@@ -1,0 +1,17 @@
+{
+  "slug": "gem-dungeon",
+  "source": "public/favicon.svg",
+  "sourceHash": "0965091ddc62484e",
+  "outputDir": "public",
+  "urlPrefix": "/",
+  "renderedAt": "2026-09-14T20:12:49.600Z",
+  "files": [
+    "favicon.ico",
+    "apple-touch-icon.png",
+    "icon-192.png",
+    "icon-512.png",
+    "icon-maskable-512.png",
+    "favicon.svg",
+    "site.webmanifest"
+  ]
+}

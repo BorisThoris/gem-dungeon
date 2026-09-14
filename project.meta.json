@@ -1,33 +1,38 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-03T21:50:36.982Z",
+  "generatedAt": "2026-09-14T20:27:13.234Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
-    "slug": "gem-dungeon-editor-epic-1",
+    "slug": "gem-dungeon",
     "repoName": "gem-dungeon-epic-1",
     "packageName": "threejs-gem-dungeon-editor",
     "version": "1.0.0",
-    "title": "ThreeJS Gem Dungeon Editor (epic-1)",
-    "subtitle": "Feature-branch copy of the dungeon editor",
-    "description": "An epic-1 feature checkout of the React Three Fiber dungeon crawler and editor.",
+    "title": "Gem Dungeon Editor",
+    "subtitle": "React Three Fiber dungeon explorer and editor",
+    "description": "A React Three Fiber dungeon you can walk through in first person and edit in place: procedural rooms, physics, a component browser, texture and asset generators, and Electron packaging.",
     "tags": [
       "React Three Fiber",
       "Three.js",
+      "Zustand",
       "Electron"
     ],
-    "accent": "#c084fc",
-    "classification": "duplicate",
-    "showcaseTier": "excluded",
-    "duplicateOf": "threejs-gem-dungeon-editor",
-    "excludedReason": "Feature-branch copy of the dungeon editor."
+    "accent": "#22d3ee",
+    "classification": "web-app",
+    "showcaseTier": "more"
   },
   "links": {
+    "deploymentUrl": "https://gem-dungeon-git.pages.dev/",
+    "localUrl": "http://127.0.0.1:4103/",
     "homepage": "./",
     "repository": "https://github.com/BorisThoris/gem-dungeon"
   },
   "runtime": {
     "packageManager": "yarn",
+    "buildCommand": "yarn build",
+    "buildOutput": "dist",
+    "runCommand": "yarn dev --host 127.0.0.1 --port 4103",
+    "devPort": 4103,
     "scripts": [
       "start",
       "dev",
@@ -56,12 +61,98 @@
       "meta:check",
       "shots",
       "social",
-      "social:check"
+      "social:check",
+      "icons",
+      "icons:check",
+      "meta:refresh"
     ]
   },
+  "capture": {
+    "route": "/",
+    "actions": [
+      {
+        "type": "waitFor",
+        "target": {
+          "selector": "canvas"
+        },
+        "state": "visible",
+        "label": "wait for the loaded 3D scene"
+      },
+      {
+        "type": "click",
+        "target": {
+          "role": "button",
+          "name": "3D Editor"
+        },
+        "label": "open the 3D editor tab"
+      },
+      {
+        "type": "wait",
+        "ms": 3000,
+        "label": "let the editor scene load"
+      },
+      {
+        "type": "uncheck",
+        "target": {
+          "role": "checkbox",
+          "name": "Show Player State"
+        },
+        "label": "hide the player-state overlay"
+      }
+    ],
+    "waitAfterReadyMs": 1500
+  },
   "media": {
-    "source": "portfolio-capture-missing",
-    "directory": "C:/Users/Gaming PC/Desktop/Repos/portfolio/public/project-shots/gem-dungeon-editor-epic-1/latest"
+    "source": "repo-local",
+    "directory": "C:/Users/Gaming PC/Desktop/Repos/gem-dungeon-epic-1/project-media",
+    "primary": "project-media/card.jpg",
+    "images": [
+      {
+        "profile": "card",
+        "file": "card.jpg",
+        "path": "project-media/card.jpg",
+        "bytes": 92680,
+        "width": 1600,
+        "height": 900,
+        "capturedAt": "2026-09-14T20:20:29.842Z"
+      },
+      {
+        "profile": "desktop",
+        "file": "desktop.jpg",
+        "path": "project-media/desktop.jpg",
+        "bytes": 90915,
+        "width": 1440,
+        "height": 900,
+        "capturedAt": "2026-09-14T20:20:41.765Z"
+      },
+      {
+        "profile": "full",
+        "file": "full.jpg",
+        "path": "project-media/full.jpg",
+        "bytes": 78773,
+        "width": 1440,
+        "height": 900,
+        "capturedAt": "2026-09-14T20:21:31.654Z"
+      },
+      {
+        "profile": "mobile",
+        "file": "mobile.jpg",
+        "path": "project-media/mobile.jpg",
+        "bytes": 33327,
+        "width": 430,
+        "height": 932,
+        "capturedAt": "2026-09-14T20:21:21.345Z"
+      },
+      {
+        "profile": "og",
+        "file": "og.jpg",
+        "path": "project-media/og.jpg",
+        "bytes": 75627,
+        "width": 1200,
+        "height": 630,
+        "capturedAt": "2026-09-14T20:21:41.674Z"
+      }
+    ]
   },
   "stack": {
     "framework": "React Three Fiber",
@@ -115,9 +206,9 @@
     "devDependencyCount": 32
   },
   "metrics": {
-    "sourceFiles": 386,
+    "sourceFiles": 388,
     "testFiles": 27,
-    "sourceLines": 78764,
+    "sourceLines": 79296,
     "largestDirectories": [
       {
         "directory": "src",
@@ -125,7 +216,7 @@
       },
       {
         "directory": "scripts",
-        "files": 30
+        "files": 32
       },
       {
         "directory": "assets",
@@ -145,13 +236,21 @@
     "hasCi": true,
     "hasDocs": true
   },
-  "analysisNotes": "Branch copy; ThreeJsGem-Fixed is the portfolio surface.",
+  "scores": {
+    "priorityScore": 76,
+    "demoabilityScore": 90,
+    "depthScore": 84,
+    "polishScore": 82,
+    "uniquenessScore": 88,
+    "maintenanceScore": 76
+  },
+  "analysisNotes": "React Three Fiber dungeon editor with procedural rooms, physics, a component browser and a clean Vite demo path; deployed from main.",
   "git": {
     "branch": "codex/epic-1-canonical-dungeon",
-    "head": "dd714d9",
-    "lastCommitDate": "2026-09-03T23:46:18+03:00",
-    "lastCommitSubject": "Refresh project metadata",
-    "commitCount": 130,
+    "head": "7a3d51e",
+    "lastCommitDate": "2026-09-04T00:53:32+03:00",
+    "lastCommitSubject": "Wire up the shots and social scripts",
+    "commitCount": 132,
     "remote": "https://github.com/BorisThoris/gem-dungeon.git"
   },
   "readme": {
