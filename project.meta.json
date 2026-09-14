@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-14T22:06:07.165Z",
+  "generatedAt": "2026-09-14T22:31:32.589Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "gem-dungeon",
@@ -104,53 +104,53 @@
   },
   "media": {
     "source": "repo-local",
-    "directory": "C:/Users/Gaming PC/Desktop/Repos/gem-dungeon-epic-1/project-media",
+    "directory": "/home/runner/work/gem-dungeon/gem-dungeon/project-media",
     "primary": "project-media/card.jpg",
     "images": [
       {
         "profile": "card",
         "file": "card.jpg",
         "path": "project-media/card.jpg",
-        "bytes": 92680,
+        "bytes": 94646,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-14T20:20:29.842Z"
+        "capturedAt": "2026-09-14T22:30:21.854Z"
       },
       {
         "profile": "desktop",
         "file": "desktop.jpg",
         "path": "project-media/desktop.jpg",
-        "bytes": 90915,
+        "bytes": 92760,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-14T20:20:41.765Z"
+        "capturedAt": "2026-09-14T22:30:32.721Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
         "path": "project-media/full.jpg",
-        "bytes": 78773,
+        "bytes": 80188,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-14T20:21:31.654Z"
+        "capturedAt": "2026-09-14T22:31:22.299Z"
       },
       {
         "profile": "mobile",
         "file": "mobile.jpg",
         "path": "project-media/mobile.jpg",
-        "bytes": 33327,
+        "bytes": 31995,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-14T20:21:21.345Z"
+        "capturedAt": "2026-09-14T22:31:11.803Z"
       },
       {
         "profile": "og",
         "file": "og.jpg",
         "path": "project-media/og.jpg",
-        "bytes": 75627,
+        "bytes": 79232,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-14T20:21:41.674Z"
+        "capturedAt": "2026-09-14T22:31:32.389Z"
       }
     ]
   },
@@ -208,7 +208,7 @@
   "metrics": {
     "sourceFiles": 388,
     "testFiles": 27,
-    "sourceLines": 79339,
+    "sourceLines": 79334,
     "largestDirectories": [
       {
         "directory": "src",
@@ -246,12 +246,12 @@
   },
   "analysisNotes": "React Three Fiber dungeon editor with procedural rooms, physics, a component browser and a clean Vite demo path; deployed from main.",
   "git": {
-    "branch": "codex/epic-1-canonical-dungeon",
-    "head": "7ee3c9d",
-    "lastCommitDate": "2026-09-15T00:39:46+03:00",
-    "lastCommitSubject": "Gate pushes on a current link-preview card and icon set",
-    "commitCount": 136,
-    "remote": "https://github.com/BorisThoris/gem-dungeon.git"
+    "branch": "main",
+    "head": "7f5ed91",
+    "lastCommitDate": "2026-09-15T01:06:08+03:00",
+    "lastCommitSubject": "Refresh screenshots, card, icons and metadata after every deployment",
+    "commitCount": 137,
+    "remote": "https://github.com/BorisThoris/gem-dungeon"
   },
   "readme": {
     "file": "README.md",

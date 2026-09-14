@@ -1,6 +1,6 @@
 {
   "slug": "gem-dungeon",
-  "capturedAt": "2026-09-14T20:21:41.804Z",
+  "capturedAt": "2026-09-14T22:31:32.444Z",
   "source": "deployment",
   "url": "https://gem-dungeon-git.pages.dev/",
   "recipe": {
@@ -44,7 +44,7 @@
       "file": "card.jpg",
       "width": 1600,
       "height": 900,
-      "bytes": 92680,
+      "bytes": 94646,
       "status": "captured"
     },
     {
@@ -52,7 +52,7 @@
       "file": "desktop.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 90915,
+      "bytes": 92760,
       "status": "captured"
     },
     {
@@ -60,7 +60,7 @@
       "file": "mobile.jpg",
       "width": 430,
       "height": 932,
-      "bytes": 33327,
+      "bytes": 31995,
       "status": "captured"
     },
     {
@@ -68,7 +68,7 @@
       "file": "full.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 78773,
+      "bytes": 80188,
       "status": "captured"
     },
     {
@@ -76,7 +76,7 @@
       "file": "og.jpg",
       "width": 1200,
       "height": 630,
-      "bytes": 75627,
+      "bytes": 79232,
       "status": "captured"
     }
   ]
