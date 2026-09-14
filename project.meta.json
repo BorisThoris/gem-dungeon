@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-14T20:27:13.234Z",
+  "generatedAt": "2026-09-14T20:48:45.053Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "gem-dungeon",
@@ -208,7 +208,7 @@
   "metrics": {
     "sourceFiles": 388,
     "testFiles": 27,
-    "sourceLines": 79296,
+    "sourceLines": 79319,
     "largestDirectories": [
       {
         "directory": "src",
@@ -247,10 +247,10 @@
   "analysisNotes": "React Three Fiber dungeon editor with procedural rooms, physics, a component browser and a clean Vite demo path; deployed from main.",
   "git": {
     "branch": "codex/epic-1-canonical-dungeon",
-    "head": "7a3d51e",
-    "lastCommitDate": "2026-09-04T00:53:32+03:00",
-    "lastCommitSubject": "Wire up the shots and social scripts",
-    "commitCount": 132,
+    "head": "ce23452",
+    "lastCommitDate": "2026-09-14T23:28:15+03:00",
+    "lastCommitSubject": "Describe the deployed editor, add its preview card and icon set",
+    "commitCount": 133,
     "remote": "https://github.com/BorisThoris/gem-dungeon.git"
   },
   "readme": {
