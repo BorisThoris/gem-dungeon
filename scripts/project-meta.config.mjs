@@ -22,12 +22,13 @@ export default {
 
   curated: {
     "title": "Gem Dungeon Editor",
-    "subtitle": "React Three Fiber dungeon explorer and editor",
-    "description": "A React Three Fiber dungeon you can walk through in first person and edit in place: procedural rooms, physics, a component browser, texture and asset generators, and Electron packaging.",
+    "subtitle": "Walk the dungeon, then rebuild it in place",
+    "description": "A first-person dungeon you explore and edit in the same window: procedurally generated rooms and corridors, a component browser of breakable and interactive objects, texture painting and mosaic tools, and Rapier physics under your feet. React Three Fiber and Zustand, packaged with Electron.",
     "tags": [
       "React Three Fiber",
       "Three.js",
-      "Zustand",
+      "Level Editor",
+      "Rapier",
       "Electron"
     ],
     "accent": "#22d3ee",
@@ -82,6 +83,7 @@ export default {
   // Graph tags, and the static directory the image is published from.
   social: {
     "htmlFile": "index.html",
+    "pageTitle": "Gem Dungeon Editor",
     "staticDir": "public",
     "imageName": "og-image.jpg",
     "imageUrlPath": "/og-image.jpg"

@@ -1,7 +1,7 @@
 {
   "name": "Gem Dungeon Editor",
   "short_name": "Gem Editor",
-  "description": "A React Three Fiber dungeon you can walk through in first person and edit in place: procedural rooms, physics, a component browser, texture and asset generators, and Electron packaging.",
+  "description": "A first-person dungeon you explore and edit in the same window: procedurally generated rooms and corridors, a component browser of breakable and interactive objects, texture painting and mosaic tools, and Rapier physics under your feet. React Three Fiber and Zustand, packaged with Electron.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

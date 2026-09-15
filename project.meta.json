@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-14T22:31:32.589Z",
+  "generatedAt": "2026-09-15T12:15:29.967Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "gem-dungeon",
@@ -9,12 +9,13 @@
     "packageName": "threejs-gem-dungeon-editor",
     "version": "1.0.0",
     "title": "Gem Dungeon Editor",
-    "subtitle": "React Three Fiber dungeon explorer and editor",
-    "description": "A React Three Fiber dungeon you can walk through in first person and edit in place: procedural rooms, physics, a component browser, texture and asset generators, and Electron packaging.",
+    "subtitle": "Walk the dungeon, then rebuild it in place",
+    "description": "A first-person dungeon you explore and edit in the same window: procedurally generated rooms and corridors, a component browser of breakable and interactive objects, texture painting and mosaic tools, and Rapier physics under your feet. React Three Fiber and Zustand, packaged with Electron.",
     "tags": [
       "React Three Fiber",
       "Three.js",
-      "Zustand",
+      "Level Editor",
+      "Rapier",
       "Electron"
     ],
     "accent": "#22d3ee",
@@ -104,7 +105,7 @@
   },
   "media": {
     "source": "repo-local",
-    "directory": "/home/runner/work/gem-dungeon/gem-dungeon/project-media",
+    "directory": "C:/Users/Gaming PC/Desktop/Repos/gem-dungeon-epic-1/project-media",
     "primary": "project-media/card.jpg",
     "images": [
       {
@@ -114,7 +115,7 @@
         "bytes": 94646,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-14T22:30:21.854Z"
+        "capturedAt": "2026-09-14T22:51:02.175Z"
       },
       {
         "profile": "desktop",
@@ -123,7 +124,7 @@
         "bytes": 92760,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-14T22:30:32.721Z"
+        "capturedAt": "2026-09-14T22:51:02.176Z"
       },
       {
         "profile": "full",
@@ -132,7 +133,7 @@
         "bytes": 80188,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-14T22:31:22.299Z"
+        "capturedAt": "2026-09-14T22:51:02.177Z"
       },
       {
         "profile": "mobile",
@@ -141,7 +142,7 @@
         "bytes": 31995,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-14T22:31:11.803Z"
+        "capturedAt": "2026-09-14T22:51:02.178Z"
       },
       {
         "profile": "og",
@@ -150,7 +151,7 @@
         "bytes": 79232,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-14T22:31:32.389Z"
+        "capturedAt": "2026-09-14T22:51:02.179Z"
       }
     ]
   },
@@ -208,7 +209,7 @@
   "metrics": {
     "sourceFiles": 388,
     "testFiles": 27,
-    "sourceLines": 79334,
+    "sourceLines": 79383,
     "largestDirectories": [
       {
         "directory": "src",
@@ -246,12 +247,12 @@
   },
   "analysisNotes": "React Three Fiber dungeon editor with procedural rooms, physics, a component browser and a clean Vite demo path; deployed from main.",
   "git": {
-    "branch": "main",
-    "head": "7f5ed91",
-    "lastCommitDate": "2026-09-15T01:06:08+03:00",
-    "lastCommitSubject": "Refresh screenshots, card, icons and metadata after every deployment",
-    "commitCount": 137,
-    "remote": "https://github.com/BorisThoris/gem-dungeon"
+    "branch": "codex/epic-1-canonical-dungeon",
+    "head": "2d5a114",
+    "lastCommitDate": "2026-09-15T01:51:02+03:00",
+    "lastCommitSubject": "Let the refresh wait up to 90 minutes for a queued Cloudflare build [meta-bot]",
+    "commitCount": 139,
+    "remote": "https://github.com/BorisThoris/gem-dungeon.git"
   },
   "readme": {
     "file": "README.md",
