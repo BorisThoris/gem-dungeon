@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-15T12:15:29.967Z",
+  "generatedAt": "2026-09-17T10:23:24.904Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "gem-dungeon",
@@ -112,46 +112,46 @@
         "profile": "card",
         "file": "card.jpg",
         "path": "project-media/card.jpg",
-        "bytes": 94646,
+        "bytes": 92647,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-14T22:51:02.175Z"
+        "capturedAt": "2026-09-17T10:22:11.475Z"
       },
       {
         "profile": "desktop",
         "file": "desktop.jpg",
         "path": "project-media/desktop.jpg",
-        "bytes": 92760,
+        "bytes": 90907,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-14T22:51:02.176Z"
+        "capturedAt": "2026-09-17T10:22:21.207Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
         "path": "project-media/full.jpg",
-        "bytes": 80188,
+        "bytes": 78746,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-14T22:51:02.177Z"
+        "capturedAt": "2026-09-17T10:23:10.158Z"
       },
       {
         "profile": "mobile",
         "file": "mobile.jpg",
         "path": "project-media/mobile.jpg",
-        "bytes": 31995,
+        "bytes": 33327,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-14T22:51:02.178Z"
+        "capturedAt": "2026-09-17T10:23:00.277Z"
       },
       {
         "profile": "og",
         "file": "og.jpg",
         "path": "project-media/og.jpg",
-        "bytes": 79232,
+        "bytes": 75622,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-14T22:51:02.179Z"
+        "capturedAt": "2026-09-17T10:23:19.907Z"
       }
     ]
   },
@@ -248,10 +248,10 @@
   "analysisNotes": "React Three Fiber dungeon editor with procedural rooms, physics, a component browser and a clean Vite demo path; deployed from main.",
   "git": {
     "branch": "codex/epic-1-canonical-dungeon",
-    "head": "2d5a114",
-    "lastCommitDate": "2026-09-15T01:51:02+03:00",
-    "lastCommitSubject": "Let the refresh wait up to 90 minutes for a queued Cloudflare build [meta-bot]",
-    "commitCount": 139,
+    "head": "de0d5de",
+    "lastCommitDate": "2026-09-15T15:19:21+03:00",
+    "lastCommitSubject": "Say what the app actually is: specific title, blurb and tags for the card",
+    "commitCount": 140,
     "remote": "https://github.com/BorisThoris/gem-dungeon.git"
   },
   "readme": {
