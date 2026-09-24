@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-24T14:36:07.302Z",
+  "generatedAt": "2026-09-24T16:25:28.995Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "gem-dungeon",
@@ -114,46 +114,46 @@
         "profile": "card",
         "file": "card.jpg",
         "path": "project-media/card.jpg",
-        "bytes": 94667,
+        "bytes": 94666,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-24T13:48:23.055Z"
+        "capturedAt": "2026-09-24T16:24:20.551Z"
       },
       {
         "profile": "desktop",
         "file": "desktop.jpg",
         "path": "project-media/desktop.jpg",
-        "bytes": 92795,
+        "bytes": 92816,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-24T13:48:23.055Z"
+        "capturedAt": "2026-09-24T16:24:30.583Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
         "path": "project-media/full.jpg",
-        "bytes": 80231,
+        "bytes": 80262,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-24T13:48:23.055Z"
+        "capturedAt": "2026-09-24T16:25:19.342Z"
       },
       {
         "profile": "mobile",
         "file": "mobile.jpg",
         "path": "project-media/mobile.jpg",
-        "bytes": 31995,
+        "bytes": 31581,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-24T13:48:23.055Z"
+        "capturedAt": "2026-09-24T16:25:09.379Z"
       },
       {
         "profile": "og",
         "file": "og.jpg",
         "path": "project-media/og.jpg",
-        "bytes": 79233,
+        "bytes": 79333,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-24T13:48:23.056Z"
+        "capturedAt": "2026-09-24T16:25:28.843Z"
       }
     ]
   },
@@ -211,7 +211,7 @@
   "metrics": {
     "sourceFiles": 389,
     "testFiles": 27,
-    "sourceLines": 79959,
+    "sourceLines": 79982,
     "largestDirectories": [
       {
         "directory": "src",
@@ -250,10 +250,10 @@
   "analysisNotes": "React Three Fiber dungeon editor with procedural rooms, physics, a component browser and a clean Vite demo path; deployed from main.",
   "git": {
     "branch": "main",
-    "head": "09343a9",
-    "lastCommitDate": "2026-09-24T16:43:25+03:00",
+    "head": "e00b3ea",
+    "lastCommitDate": "2026-09-24T19:12:47+03:00",
     "lastCommitSubject": "Update the metadata toolkit scripts: trailers step, refresh --commit, capture.skip",
-    "commitCount": 145,
+    "commitCount": 147,
     "remote": "https://github.com/BorisThoris/gem-dungeon"
   },
   "readme": {
