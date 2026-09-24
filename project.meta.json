@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-24T12:51:11.568Z",
+  "generatedAt": "2026-09-24T14:36:07.302Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "gem-dungeon",
@@ -117,7 +117,7 @@
         "bytes": 94667,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-24T12:50:01.508Z"
+        "capturedAt": "2026-09-24T13:48:23.055Z"
       },
       {
         "profile": "desktop",
@@ -126,7 +126,7 @@
         "bytes": 92795,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-24T12:50:12.001Z"
+        "capturedAt": "2026-09-24T13:48:23.055Z"
       },
       {
         "profile": "full",
@@ -135,7 +135,7 @@
         "bytes": 80231,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-24T12:51:01.426Z"
+        "capturedAt": "2026-09-24T13:48:23.055Z"
       },
       {
         "profile": "mobile",
@@ -144,7 +144,7 @@
         "bytes": 31995,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-24T12:50:51.038Z"
+        "capturedAt": "2026-09-24T13:48:23.055Z"
       },
       {
         "profile": "og",
@@ -153,7 +153,7 @@
         "bytes": 79233,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-24T12:51:11.384Z"
+        "capturedAt": "2026-09-24T13:48:23.056Z"
       }
     ]
   },
@@ -211,7 +211,7 @@
   "metrics": {
     "sourceFiles": 389,
     "testFiles": 27,
-    "sourceLines": 79933,
+    "sourceLines": 79959,
     "largestDirectories": [
       {
         "directory": "src",
@@ -250,10 +250,10 @@
   "analysisNotes": "React Three Fiber dungeon editor with procedural rooms, physics, a component browser and a clean Vite demo path; deployed from main.",
   "git": {
     "branch": "main",
-    "head": "cf472f0",
-    "lastCommitDate": "2026-09-24T15:41:23+03:00",
+    "head": "09343a9",
+    "lastCommitDate": "2026-09-24T16:43:25+03:00",
     "lastCommitSubject": "Update the metadata toolkit scripts: trailers step, refresh --commit, capture.skip",
-    "commitCount": 142,
+    "commitCount": 145,
     "remote": "https://github.com/BorisThoris/gem-dungeon"
   },
   "readme": {
