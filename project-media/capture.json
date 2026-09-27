@@ -1,6 +1,6 @@
 {
   "slug": "gem-dungeon",
-  "capturedAt": "2026-09-27T14:07:10.810Z",
+  "capturedAt": "2026-09-27T14:12:43.951Z",
   "source": "deployment",
   "url": "https://gem-dungeon-git.pages.dev/",
   "recipe": {
@@ -51,14 +51,14 @@
       "file": "card.jpg",
       "width": 1600,
       "height": 900,
-      "bytes": 92631,
+      "bytes": 94611,
       "status": "captured",
       "stats": {
         "mean": 40,
         "std": 25,
         "dark": 0.015,
         "light": 0,
-        "colours": 40
+        "colours": 44
       }
     },
     {
@@ -66,14 +66,14 @@
       "file": "desktop.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 90735,
+      "bytes": 92838,
       "status": "captured",
       "stats": {
         "mean": 41,
-        "std": 25,
+        "std": 26,
         "dark": 0.018,
         "light": 0,
-        "colours": 42
+        "colours": 43
       }
     },
     {
@@ -81,14 +81,14 @@
       "file": "mobile.jpg",
       "width": 430,
       "height": 932,
-      "bytes": 33327,
+      "bytes": 31995,
       "status": "captured",
       "stats": {
-        "mean": 136,
+        "mean": 138,
         "std": 83,
-        "dark": 0.16,
+        "dark": 0.158,
         "light": 0,
-        "colours": 58
+        "colours": 49
       },
       "skipped": [
         "optional step skipped (open the 3D editor tab): locator.click: Timeout 15000ms exceeded.",
@@ -100,14 +100,14 @@
       "file": "full.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 78668,
+      "bytes": 80112,
       "status": "captured",
       "stats": {
         "mean": 41,
-        "std": 25,
-        "dark": 0.019,
+        "std": 26,
+        "dark": 0.018,
         "light": 0,
-        "colours": 42
+        "colours": 43
       }
     },
     {
@@ -115,14 +115,14 @@
       "file": "og.jpg",
       "width": 1200,
       "height": 630,
-      "bytes": 75579,
+      "bytes": 79371,
       "status": "captured",
       "stats": {
         "mean": 43,
-        "std": 27,
-        "dark": 0.018,
+        "std": 28,
+        "dark": 0.016,
         "light": 0,
-        "colours": 41
+        "colours": 42
       }
     }
   ]

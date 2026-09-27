@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-27T14:07:34.043Z",
+  "generatedAt": "2026-09-27T14:12:44.088Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "gem-dungeon",
@@ -116,53 +116,53 @@
   },
   "media": {
     "source": "repo-local",
-    "directory": "C:/Users/GAMING~1/AppData/Local/Temp/media-rollout-FvTdF8/project-media",
+    "directory": "/home/runner/work/gem-dungeon/gem-dungeon/project-media",
     "primary": "project-media/card.jpg",
     "images": [
       {
         "profile": "card",
         "file": "card.jpg",
         "path": "project-media/card.jpg",
-        "bytes": 92631,
+        "bytes": 94611,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-27T14:04:59.056Z"
+        "capturedAt": "2026-09-27T14:11:30.958Z"
       },
       {
         "profile": "desktop",
         "file": "desktop.jpg",
         "path": "project-media/desktop.jpg",
-        "bytes": 90735,
+        "bytes": 92838,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-27T14:05:16.200Z"
+        "capturedAt": "2026-09-27T14:11:42.269Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
         "path": "project-media/full.jpg",
-        "bytes": 78668,
+        "bytes": 80112,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-27T14:06:38.251Z"
+        "capturedAt": "2026-09-27T14:12:33.161Z"
       },
       {
         "profile": "mobile",
         "file": "mobile.jpg",
         "path": "project-media/mobile.jpg",
-        "bytes": 33327,
+        "bytes": 31995,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-27T14:05:58.391Z"
+        "capturedAt": "2026-09-27T14:12:21.832Z"
       },
       {
         "profile": "og",
         "file": "og.jpg",
         "path": "project-media/og.jpg",
-        "bytes": 75579,
+        "bytes": 79371,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-27T14:07:00.158Z"
+        "capturedAt": "2026-09-27T14:12:43.907Z"
       }
     ],
     "trailers": [
@@ -273,12 +273,12 @@
   },
   "analysisNotes": "React Three Fiber dungeon editor with procedural rooms, physics, a component browser and a clean Vite demo path; deployed from main.",
   "git": {
-    "branch": "HEAD",
-    "head": "8ba6637",
-    "lastCommitDate": "2026-09-24T16:25:29+00:00",
-    "lastCommitSubject": "Refresh screenshots, card, icons and metadata [meta-bot]",
-    "commitCount": 148,
-    "remote": "https://github.com/BorisThoris/gem-dungeon.git"
+    "branch": "main",
+    "head": "3aa0f84",
+    "lastCommitDate": "2026-09-27T17:07:42+03:00",
+    "lastCommitSubject": "A media strategy with tests: screenshots that show the app, a recorded trailer, a gated refresh",
+    "commitCount": 149,
+    "remote": "https://github.com/BorisThoris/gem-dungeon"
   },
   "readme": {
     "file": "README.md",
