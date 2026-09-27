@@ -1,6 +1,6 @@
 {
   "slug": "gem-dungeon",
-  "capturedAt": "2026-09-24T16:25:28.881Z",
+  "capturedAt": "2026-09-27T14:07:10.810Z",
   "source": "deployment",
   "url": "https://gem-dungeon-git.pages.dev/",
   "recipe": {
@@ -12,7 +12,8 @@
           "selector": "canvas"
         },
         "state": "visible",
-        "label": "wait for the loaded 3D scene"
+        "timeoutMs": 90000,
+        "label": "wait for the rooms to pre-load"
       },
       {
         "type": "click",
@@ -20,12 +21,14 @@
           "role": "button",
           "name": "3D Editor"
         },
-        "label": "open the 3D editor tab"
+        "label": "open the 3D editor tab",
+        "optional": true
       },
       {
         "type": "wait",
-        "ms": 3000,
-        "label": "let the editor scene load"
+        "ms": 3500,
+        "label": "let the editor scene load",
+        "optional": true
       },
       {
         "type": "uncheck",
@@ -33,10 +36,14 @@
           "role": "checkbox",
           "name": "Show Player State"
         },
-        "label": "hide the player-state overlay"
+        "label": "hide the player-state overlay",
+        "optional": true
       }
     ],
-    "waitAfterReadyMs": 1500
+    "waitAfterReadyMs": 1500,
+    "quality": {
+      "minStd": 12
+    }
   },
   "profiles": [
     {
@@ -44,40 +51,79 @@
       "file": "card.jpg",
       "width": 1600,
       "height": 900,
-      "bytes": 94666,
-      "status": "captured"
+      "bytes": 92631,
+      "status": "captured",
+      "stats": {
+        "mean": 40,
+        "std": 25,
+        "dark": 0.015,
+        "light": 0,
+        "colours": 40
+      }
     },
     {
       "profile": "desktop",
       "file": "desktop.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 92816,
-      "status": "captured"
+      "bytes": 90735,
+      "status": "captured",
+      "stats": {
+        "mean": 41,
+        "std": 25,
+        "dark": 0.018,
+        "light": 0,
+        "colours": 42
+      }
     },
     {
       "profile": "mobile",
       "file": "mobile.jpg",
       "width": 430,
       "height": 932,
-      "bytes": 31581,
-      "status": "captured"
+      "bytes": 33327,
+      "status": "captured",
+      "stats": {
+        "mean": 136,
+        "std": 83,
+        "dark": 0.16,
+        "light": 0,
+        "colours": 58
+      },
+      "skipped": [
+        "optional step skipped (open the 3D editor tab): locator.click: Timeout 15000ms exceeded.",
+        "optional step skipped (hide the player-state overlay): locator.uncheck: Timeout 15000ms exceeded."
+      ]
     },
     {
       "profile": "full",
       "file": "full.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 80262,
-      "status": "captured"
+      "bytes": 78668,
+      "status": "captured",
+      "stats": {
+        "mean": 41,
+        "std": 25,
+        "dark": 0.019,
+        "light": 0,
+        "colours": 42
+      }
     },
     {
       "profile": "og",
       "file": "og.jpg",
       "width": 1200,
       "height": 630,
-      "bytes": 79333,
-      "status": "captured"
+      "bytes": 75579,
+      "status": "captured",
+      "stats": {
+        "mean": 43,
+        "std": 27,
+        "dark": 0.018,
+        "light": 0,
+        "colours": 41
+      }
     }
   ]
 }

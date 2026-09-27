@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-24T16:25:28.995Z",
+  "generatedAt": "2026-09-27T14:07:34.043Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "gem-dungeon",
@@ -67,7 +67,9 @@
       "icons:check",
       "meta:refresh",
       "trailers",
-      "trailers:check"
+      "trailers:check",
+      "test:media",
+      "test:media:e2e"
     ]
   },
   "capture": {
@@ -79,7 +81,8 @@
           "selector": "canvas"
         },
         "state": "visible",
-        "label": "wait for the loaded 3D scene"
+        "timeoutMs": 90000,
+        "label": "wait for the rooms to pre-load"
       },
       {
         "type": "click",
@@ -87,12 +90,14 @@
           "role": "button",
           "name": "3D Editor"
         },
-        "label": "open the 3D editor tab"
+        "label": "open the 3D editor tab",
+        "optional": true
       },
       {
         "type": "wait",
-        "ms": 3000,
-        "label": "let the editor scene load"
+        "ms": 3500,
+        "label": "let the editor scene load",
+        "optional": true
       },
       {
         "type": "uncheck",
@@ -100,60 +105,79 @@
           "role": "checkbox",
           "name": "Show Player State"
         },
-        "label": "hide the player-state overlay"
+        "label": "hide the player-state overlay",
+        "optional": true
       }
     ],
-    "waitAfterReadyMs": 1500
+    "waitAfterReadyMs": 1500,
+    "quality": {
+      "minStd": 12
+    }
   },
   "media": {
     "source": "repo-local",
-    "directory": "/home/runner/work/gem-dungeon/gem-dungeon/project-media",
+    "directory": "C:/Users/GAMING~1/AppData/Local/Temp/media-rollout-FvTdF8/project-media",
     "primary": "project-media/card.jpg",
     "images": [
       {
         "profile": "card",
         "file": "card.jpg",
         "path": "project-media/card.jpg",
-        "bytes": 94666,
+        "bytes": 92631,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-09-24T16:24:20.551Z"
+        "capturedAt": "2026-09-27T14:04:59.056Z"
       },
       {
         "profile": "desktop",
         "file": "desktop.jpg",
         "path": "project-media/desktop.jpg",
-        "bytes": 92816,
+        "bytes": 90735,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-24T16:24:30.583Z"
+        "capturedAt": "2026-09-27T14:05:16.200Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
         "path": "project-media/full.jpg",
-        "bytes": 80262,
+        "bytes": 78668,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-09-24T16:25:19.342Z"
+        "capturedAt": "2026-09-27T14:06:38.251Z"
       },
       {
         "profile": "mobile",
         "file": "mobile.jpg",
         "path": "project-media/mobile.jpg",
-        "bytes": 31581,
+        "bytes": 33327,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-09-24T16:25:09.379Z"
+        "capturedAt": "2026-09-27T14:05:58.391Z"
       },
       {
         "profile": "og",
         "file": "og.jpg",
         "path": "project-media/og.jpg",
-        "bytes": 79333,
+        "bytes": 75579,
         "width": 1200,
         "height": 630,
-        "capturedAt": "2026-09-24T16:25:28.843Z"
+        "capturedAt": "2026-09-27T14:07:00.158Z"
+      }
+    ],
+    "trailers": [
+      {
+        "id": "tour",
+        "title": "Gem Dungeon Editor: rooms, textures and mosaics",
+        "url": "https://gem-dungeon-git.pages.dev/trailers/tour.mp4",
+        "poster": "https://gem-dungeon-git.pages.dev/trailers/tour.jpg",
+        "file": "public/trailers/tour.mp4",
+        "bytes": 822016,
+        "width": 1280,
+        "height": 720,
+        "duration": 24,
+        "orientation": "landscape",
+        "builtAt": "2026-09-27T14:01:47.393Z"
       }
     ]
   },
@@ -209,9 +233,9 @@
     "devDependencyCount": 32
   },
   "metrics": {
-    "sourceFiles": 389,
-    "testFiles": 27,
-    "sourceLines": 79982,
+    "sourceFiles": 392,
+    "testFiles": 29,
+    "sourceLines": 80896,
     "largestDirectories": [
       {
         "directory": "src",
@@ -219,7 +243,7 @@
       },
       {
         "directory": "scripts",
-        "files": 33
+        "files": 36
       },
       {
         "directory": "assets",
@@ -249,12 +273,12 @@
   },
   "analysisNotes": "React Three Fiber dungeon editor with procedural rooms, physics, a component browser and a clean Vite demo path; deployed from main.",
   "git": {
-    "branch": "main",
-    "head": "e00b3ea",
-    "lastCommitDate": "2026-09-24T19:12:47+03:00",
-    "lastCommitSubject": "Update the metadata toolkit scripts: trailers step, refresh --commit, capture.skip",
-    "commitCount": 147,
-    "remote": "https://github.com/BorisThoris/gem-dungeon"
+    "branch": "HEAD",
+    "head": "8ba6637",
+    "lastCommitDate": "2026-09-24T16:25:29+00:00",
+    "lastCommitSubject": "Refresh screenshots, card, icons and metadata [meta-bot]",
+    "commitCount": 148,
+    "remote": "https://github.com/BorisThoris/gem-dungeon.git"
   },
   "readme": {
     "file": "README.md",
