@@ -420,11 +420,15 @@ function traversalLink(
 function roomCentroid(room: DungeonRoom, dungeon: Dungeon): WorldPosition {
   const positions = room.footprint.cells.map((cell) =>
     gridCellToWorld(cell, dungeon.config));
-  return {
+  const center = {
     x: positions.reduce((sum, position) => sum + position.x, 0) / positions.length,
     y: positions.reduce((sum, position) => sum + position.y, 0) / positions.length,
     z: positions.reduce((sum, position) => sum + position.z, 0) / positions.length,
   };
+  // Centroids of U/C/H footprints can be outside their walkable cells.
+  return [...positions].sort((a, b) =>
+    ((a.x-center.x)**2+(a.z-center.z)**2)-((b.x-center.x)**2+(b.z-center.z)**2)
+    || a.z-b.z || a.x-b.x)[0];
 }
 
 function getRoom(dungeon: Dungeon, roomId: string): DungeonRoom {

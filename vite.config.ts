@@ -54,6 +54,7 @@ export default defineConfig({
     strictPort: true
   },
   optimizeDeps: {
+    entries: ['index.html'],
     exclude: ['electron'],
     include: ['three', '@react-three/fiber', '@react-three/drei', '@react-three/rapier']
   },

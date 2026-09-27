@@ -10,10 +10,10 @@
 //   { type: 'fill' | 'type', target, value }
 //   { type: 'press', key }                                 one key press (Playwright key names)
 //   { type: 'tap', at: [x, y] }                            click a point of the viewport (a canvas button)
-//   { type: 'key', key, holdMs }                           hold a key down (a game control)
+//   { type: 'key', key, holdMs?, until?, timeoutMs? }                           hold a key down (a game control)
 //   { type: 'keys', keys: [..], eachMs }                   a sequence of presses
 //   { type: 'mouse', to: [x, y], steps?, holdMs? }         move the pointer (fractions of the viewport)
-//   { type: 'drag', from: [x, y], to: [x, y], steps? }     press, move, release
+//   { type: 'drag', from: [x, y], to: [x, y], steps?, button?, deltaPixels?, lockWaitMs? }     press, move, release
 //   { type: 'scroll', deltaY, steps?, eachMs? }            wheel-scroll the page
 //   Every action takes `label` (for logs) and `optional: true` (a failure is a
 //   note, not an error). A target is { role, name }, { text } or { selector }.
@@ -225,8 +225,12 @@ async function runAction(page, action) {
     }
     case 'key':
       await page.keyboard.down(action.key);
-      await page.waitForTimeout(action.holdMs ?? 500);
-      await page.keyboard.up(action.key);
+      try {
+        if (action.until) await locatorFor(page, action.until).waitFor({ state: 'visible', timeout });
+        else await page.waitForTimeout(action.holdMs ?? 500);
+      } finally {
+        await page.keyboard.up(action.key);
+      }
       return;
     case 'keys':
       for (const key of action.keys ?? []) {
@@ -244,9 +248,23 @@ async function runAction(page, action) {
       const from = point(action.from ?? [0.5, 0.5]);
       const to = point(action.to ?? [0.6, 0.5]);
       await page.mouse.move(from.x, from.y);
-      await page.mouse.down();
-      await page.mouse.move(to.x, to.y, { steps: action.steps ?? 20 });
-      await page.mouse.up();
+      const button = action.button ?? 'left';
+      // Flush the unheld pointer move before requesting pointer lock. Browser
+      // mousemove coalescing must not turn that reposition into a camera turn.
+      if (button === 'right') await page.waitForTimeout(action.lockWaitMs ?? 100);
+      await page.mouse.down({ button });
+      try {
+        if (action.lockWaitMs) await page.waitForTimeout(action.lockWaitMs);
+        if (button === 'right') await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+        const destination = action.deltaPixels
+          ? { x: from.x + action.deltaPixels[0], y: from.y + action.deltaPixels[1] }
+          : to;
+        await page.mouse.move(destination.x, destination.y, { steps: action.steps ?? 20 });
+        if (button === 'right') await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+      } finally {
+        await page.mouse.up({ button });
+        if (button === 'right') await page.waitForTimeout(action.lockWaitMs ?? 100);
+      }
       return;
     }
     case 'scroll': {
@@ -336,7 +354,7 @@ export function assessFrame(stats, quality = {}) {
 export async function recordRecipe(chromium, { url, recipe, outDir, log = console.log }) {
   const viewport = recipe.viewport ?? { width: 1280, height: 720 };
   fs.mkdirSync(outDir, { recursive: true });
-  const browser = await chromium.launch({ headless: true, args: recipe.browserArgs ?? [] });
+  const browser = await chromium.launch({ headless: true, channel: recipe.browserChannel, args: recipe.browserArgs ?? [] });
   let videoPath = null;
   let stats = null;
   const skipped = [];
@@ -356,7 +374,7 @@ export async function recordRecipe(chromium, { url, recipe, outDir, log = consol
       // timeline are both sampled, so a fade or a scene change at one end
       // does not fail a recording that shows the app for the rest of it.
       const opening = await frameStats(page);
-      skipped.push(...(await runActions(page, recipe.timeline ?? [], { strict: false, log })));
+      skipped.push(...(await runActions(page, recipe.timeline ?? [], { strict: recipe.strictActions ?? false, log })));
       const closing = await frameStats(page);
       stats = assessFrame(closing, recipe.quality).length <= assessFrame(opening, recipe.quality).length ? closing : opening;
       const remaining = (recipe.durationMs ?? 20000) - (Date.now() - started);

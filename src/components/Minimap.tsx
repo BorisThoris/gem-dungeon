@@ -11,6 +11,7 @@ import useMapStore from "../store/mapStore";
 interface MinimapProps {
   readonly isVisible?: boolean;
   readonly onToggle?: (visible: boolean) => void;
+  readonly showToggle?: boolean;
 }
 
 interface FloorView {
@@ -20,7 +21,7 @@ interface FloorView {
   readonly width: number;
 }
 
-const Minimap: React.FC<MinimapProps> = ({ isVisible = true, onToggle }) => {
+const Minimap: React.FC<MinimapProps> = ({ isVisible = true, onToggle, showToggle = true }) => {
   const dungeon = useMapStore((state) => state.currentDungeon);
   const runState = useMapStore((state) => state.dungeonRunState);
   const [visible, setVisible] = useState(isVisible);
@@ -33,8 +34,11 @@ const Minimap: React.FC<MinimapProps> = ({ isVisible = true, onToggle }) => {
   }, [runState]);
   useEffect(() => {
     const handleKey = (event: KeyboardEvent) => {
+      if (event.repeat || (event.target instanceof HTMLElement && event.target.closest("input,textarea,select,[contenteditable=true]"))) return;
       if (event.key === "Tab") {
         event.preventDefault();
+        setVisible(true);
+        onToggle?.(true);
         setExpanded((value) => !value);
       } else if (event.key.toLowerCase() === "m") {
         setVisible((value) => {
@@ -55,6 +59,7 @@ const Minimap: React.FC<MinimapProps> = ({ isVisible = true, onToggle }) => {
   );
 
   if (!visible) {
+    if (!showToggle) return null;
     return (
       <button
         aria-label="Show canonical minimap"
@@ -129,9 +134,8 @@ const Minimap: React.FC<MinimapProps> = ({ isVisible = true, onToggle }) => {
             visitedRoomIds={runState.visitedRoomIds}
           />
           <div style={footerStyle}>
-            <span>{runState.visitedRoomIds.size}/{dungeon.rooms.length} visited</span>
-            <span>{dungeon.metrics.cycleRank} loops</span>
-            <span>{dungeon.metrics.corridorLength.total} route cells</span>
+            <span>{runState.visitedRoomIds.size}/{dungeon.rooms.length} chambers charted</span>
+            <span>Tab to expand · M to hide</span>
           </div>
         </>
       ) : (

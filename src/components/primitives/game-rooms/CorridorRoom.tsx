@@ -1,4 +1,5 @@
 import React from "react";
+import { RigidBody } from "@react-three/rapier";
 interface CorridorRoomProps {
   size?: number; // standard room size
 }
@@ -9,7 +10,7 @@ const CorridorRoom: React.FC<CorridorRoomProps> = ({ size = 10 }) => {
   const width = size * 0.5;
 
   return (
-    <group>
+    <RigidBody type="fixed" colliders="cuboid">
       {/* Narrow platform floor inside the square room */}
       <mesh position={[0, 0, 0]} receiveShadow>
         <boxGeometry args={[length, 0.2, width]} />
@@ -25,7 +26,7 @@ const CorridorRoom: React.FC<CorridorRoomProps> = ({ size = 10 }) => {
         <boxGeometry args={[length, 2, 0.15]} />
         <meshStandardMaterial color="#8B4513" />
       </mesh>
-    </group>
+    </RigidBody>
   );
 };
 

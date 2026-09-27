@@ -24,7 +24,6 @@ import RoomActionCards from "./RoomActionCards";
 import {
   usePlayerStats,
   useConsolidatedGameStore,
-  useHandsOut,
 } from "../store/consolidatedGameStore";
 import PatternValidationTest from "./PatternValidationTest";
 
@@ -49,6 +48,17 @@ const LoadingFallback: React.FC = () => (
     </div>
   </Html>
 );
+
+function EditorCameraReset({ playing }: { playing: boolean }) {
+  const { camera } = useThree();
+  useEffect(() => {
+    if (playing) return;
+    camera.position.set(10,10,10);
+    camera.lookAt(0,1,0);
+    if (camera instanceof THREE.PerspectiveCamera) { camera.fov=60;camera.updateProjectionMatrix(); }
+  }, [camera,playing]);
+  return null;
+}
 
 // Spawn Preview Component
 const SpawnPreview: React.FC<{
@@ -210,8 +220,8 @@ const ThreeDEditor: React.FC = () => {
   const [showStatsEditor, setShowStatsEditor] = useState<boolean>(false);
 
   // Add debugging states
-  const [showDoors, setShowDoors] = useState<boolean>(true);
-  const [showPlayerState, setShowPlayerState] = useState<boolean>(true);
+  const [showDoors, setShowDoors] = useState<boolean>(false);
+  const [showPlayerState, setShowPlayerState] = useState<boolean>(false);
   const [doorsLocked, setDoorsLocked] = useState<boolean>(false);
   const [showPatternTest, setShowPatternTest] = useState<boolean>(false);
   const [dragMode, setDragMode] = useState<boolean>(false);
@@ -221,6 +231,14 @@ const ThreeDEditor: React.FC = () => {
     0, 1.5, 0,
   ]);
   const [isSpawning, setIsSpawning] = useState<boolean>(false);
+  useEffect(() => {
+    const exitPlaytest=(event:KeyboardEvent)=>{
+      if(event.key!=="Escape"||!isSpawning)return;
+      document.exitPointerLock?.();window.dispatchEvent(new Event("game-pause"));setIsSpawning(false);
+    };
+    window.addEventListener("keydown",exitPlaytest);
+    return()=>window.removeEventListener("keydown",exitPlaytest);
+  },[isSpawning]);
 
   // Get player stats for debugging
   const playerStats = usePlayerStats();
@@ -229,7 +247,7 @@ const ThreeDEditor: React.FC = () => {
   const gameStore = useConsolidatedGameStore();
 
   // Get hands out state
-  const handsOut = useHandsOut();
+  const [handsOut, setHandsOut] = useState(false);
 
   // Add consolidated card system for biomes - DISABLED (but keep logic)
   const [roomActionCards, setRoomActionCards] = useState<any[]>([]);
@@ -1073,7 +1091,16 @@ const ThreeDEditor: React.FC = () => {
 
       {/* Main 3D Viewport */}
       <div style={{ flex: 1, position: "relative" }}>
+        <div style={{position:"absolute",bottom:20,left:"50%",transform:"translateX(-50%)",zIndex:1003,display:"flex",alignItems:"center",gap:12,padding:"10px 14px",border:"1px solid #555",borderRadius:6,background:"#222e",color:"white",fontFamily:"Arial",fontSize:12,whiteSpace:"nowrap"}}>
+          <span>{isSpawning?"WASD to walk · hold right mouse to look":"Edit properties, then walk through your scene."}</span>
+          <button disabled={!getCurrentSelection() || !["rooms","biomes"].includes(selectedCategory)}
+            onClick={()=>{document.exitPointerLock?.();window.dispatchEvent(new Event("game-pause"));setIsSpawning(!isSpawning);setSpawnMode(false);}}
+            style={{padding:"10px 16px",background:"#4CAF50",color:"white",border:0,borderRadius:4,cursor:"pointer",opacity:getCurrentSelection()?1:.5}}>
+            {isSpawning?"Return to editing (Esc)":"Play scene"}
+          </button>
+        </div>
         <Canvas camera={{ position: [10, 10, 10], fov: 60 }}>
+          <EditorCameraReset playing={isSpawning}/>
           <ambientLight intensity={0.4} />
           <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
           {/* Disable OrbitControls when player is spawned */}
@@ -1256,8 +1283,10 @@ const ThreeDEditor: React.FC = () => {
             {isSpawning && (
               <Player
                 initialSpawnPosition={spawnPosition}
+                fallResetY={-20}
+                initialYaw={selectedCategory === "rooms" ? -Math.PI / 2 : 0}
                 showDebugInfo={false}
-                showHand={false} // Hand visibility now controlled by handsOut state
+                showHand={handsOut}
                 handGesture="idle"
                 editorMode={false} // Full player control
               />
@@ -1359,7 +1388,7 @@ const ThreeDEditor: React.FC = () => {
         </button>
 
         <button
-          onClick={() => gameStore.toggleHands()}
+          onClick={() => { setHandsOut(!handsOut); gameStore.setHandsOut(true); }}
           style={{
             position: "absolute",
             top: "70px",
@@ -1407,7 +1436,7 @@ const ThreeDEditor: React.FC = () => {
             boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
             transition: "background 0.2s ease",
           }}
-          title="Spawn Player"
+          title="Choose a playtest spawn"
         >
           👤
         </button>
@@ -1460,35 +1489,7 @@ const ThreeDEditor: React.FC = () => {
               transition: "background 0.2s ease",
             }}
           >
-            SPAWN PLAYER
-          </button>
-        )}
-
-        {/* Remove Player Button */}
-        {isSpawning && (
-          <button
-            onClick={() => {
-              setIsSpawning(false);
-            }}
-            style={{
-              position: "absolute",
-              top: "20px",
-              left: "50%",
-              transform: "translateX(-50%)",
-              zIndex: 1002,
-              background: "#f44336",
-              color: "white",
-              border: "none",
-              borderRadius: "25px",
-              padding: "10px 20px",
-              cursor: "pointer",
-              fontSize: "14px",
-              fontWeight: "bold",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
-              transition: "background 0.2s ease",
-            }}
-          >
-            REMOVE PLAYER
+            PLAY THIS SCENE
           </button>
         )}
 

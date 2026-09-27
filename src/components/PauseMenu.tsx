@@ -38,7 +38,7 @@ const PauseMenu: React.FC<PauseMenuProps> = ({ isVisible, onUnpause }) => {
 
       <div style={{ textAlign: "center", marginBottom: "2rem" }}>
         <p style={{ fontSize: "1.2rem", margin: "0 0 1rem 0" }}>
-          Press X to unpause
+          Press X or Escape to resume
         </p>
         <p style={{ fontSize: "1rem", opacity: 0.7, margin: 0 }}>
           Or click the button below
@@ -77,7 +77,7 @@ const PauseMenu: React.FC<PauseMenuProps> = ({ isVisible, onUnpause }) => {
             e.currentTarget.style.transform = "scale(1)";
           }}
         >
-          Lol, unpause
+          Resume exploration
         </button>
 
         {/* 3D Editor Button - Only show in dev mode */}

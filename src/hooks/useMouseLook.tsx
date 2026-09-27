@@ -25,7 +25,7 @@ export const useMouseLook = (editorMode: boolean = false) => {
 
     // Set FOV to 95 degrees
     if (camera instanceof THREE.PerspectiveCamera) {
-      camera.fov = 95;
+      camera.fov = 75;
       camera.updateProjectionMatrix();
     }
 
@@ -206,7 +206,7 @@ export const useMouseLook = (editorMode: boolean = false) => {
       window.removeEventListener("playerTeleport", handleTeleport);
       offSetRotation?.();
     };
-  }, [camera, isElectron]);
+  }, [camera, isElectron, editorMode]);
 
   return {
     isPointerLocked: isPointerLocked.current,

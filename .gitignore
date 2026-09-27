@@ -29,3 +29,7 @@ artifacts
 *.sw?
 # recorded trailer masters (scripts/build-project-trailers.mjs)
 project-media/.captures/
+
+# Local browser verification captures
+.playwright-cli/
+output/playwright/

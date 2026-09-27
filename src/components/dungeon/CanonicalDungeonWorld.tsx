@@ -1,3 +1,4 @@
+import { ExpeditionTrail } from "./ExpeditionDetails";
 import React, { memo, useCallback, useLayoutEffect, useMemo, useRef } from "react";
 import { CuboidCollider, RigidBody } from "@react-three/rapier";
 import * as THREE from "three";
@@ -61,6 +62,7 @@ const CanonicalDungeonWorld: React.FC<CanonicalDungeonWorldProps> = memo(({
 
   return (
     <group name="canonical-dungeon-world">
+      <ExpeditionTrail dungeon={dungeon} runState={runState}/>
       <FloorInstances
         cellSize={cellSize}
         floorThickness={floorThickness}
@@ -195,7 +197,8 @@ function FloorInstances({
       ref={ref}
     >
       <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial roughness={0.92} metalness={0.02} vertexColors />
+      {/* Instance colors are supplied by setColorAt; box vertices have no color attribute. */}
+      <meshStandardMaterial roughness={0.92} metalness={0.02} />
     </instancedMesh>
   );
 }
@@ -242,7 +245,7 @@ function WallInstances({
       ref={ref}
     >
       <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial roughness={0.86} metalness={0.04} vertexColors />
+      <meshStandardMaterial roughness={0.86} metalness={0.04} />
     </instancedMesh>
   );
 }

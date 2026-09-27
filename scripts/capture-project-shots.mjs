@@ -70,7 +70,7 @@ try {
   console.log('[shots] ' + config.slug + ': capturing ' + target + ' (' + base.source + ')');
   fs.mkdirSync(outputDir, { recursive: true });
 
-  const browser = await chromium.launch({ headless: true, args: capture.browserArgs ?? [] });
+  const browser = await chromium.launch({ headless: true, channel: capture.browserChannel, args: capture.browserArgs ?? [] });
   const results = [];
 
   try {

@@ -1,4 +1,5 @@
 import React from "react";
+import { useSaveSystem } from "../hooks/useSaveSystem";
 
 interface SharedNavigationProps {
   currentPage:
@@ -14,17 +15,19 @@ const SharedNavigation: React.FC<SharedNavigationProps> = ({
   currentPage,
   className = "",
 }) => {
+  const { saveGame } = useSaveSystem();
+  const [error, setError] = React.useState("");
   const navItems = [
     {
       id: "game",
-      label: "Game",
-      url: "/",
+      label: "Return to expedition",
+      url: "?resume=true",
       description: "Main Game",
     },
     {
       id: "editor",
       label: "3D Editor",
-      url: "?editor=true",
+      url: "?editor=true&category=rooms&componentType=corridor",
       description: "3D Scene Builder",
     },
     {
@@ -55,14 +58,22 @@ const SharedNavigation: React.FC<SharedNavigationProps> = ({
       {navItems.map((item) => (
         <button
           key={item.id}
-          onClick={() => (window.location.href = item.url)}
+          onClick={() => {
+            if (currentPage === item.id) return;
+            if (currentPage === "game" && !saveGame()) {
+              setError("Checkpoint could not be saved. Return to the expedition and try again.");
+              return;
+            }
+            window.location.href = item.url;
+          }}
           className="shared-navigation__item"
           aria-current={currentPage === item.id ? "page" : undefined}
           title={item.description}
         >
-          {item.label}
+          {currentPage === "game" && item.id !== "game" ? `Save & open ${item.label}` : item.label}
         </button>
       ))}
+      {error && <p role="alert">{error}</p>}
     </nav>
   );
 };

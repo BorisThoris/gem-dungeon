@@ -81,6 +81,30 @@ yarn analyze:dungeon
 yarn benchmark:dungeon:techniques
 ```
 
+## Explore and playtest
+
+Choose **Begin exploring**, then use WASD or arrow keys to walk, Shift to run,
+and hold the right mouse button to look. Green floor markers follow an actually
+accessible route to unexplored rooms. The compact map tracks visited rooms;
+entering a key room grants the real progression key and opens matching locks.
+Explicit-action passages can be clicked. The exit objective completes only on
+entering the canonical end room. Room role names describe generated content;
+they do not imply a separate combat or shop simulation.
+
+Escape or X pauses physics and clears held movement keys. Save checkpoint stores
+the generated dungeon, visited rooms, keys, and current chamber on this device.
+Loading returns to a safe floor cell in that chamber rather than an exact camera
+pose. Workshop saves before opening the existing creation tools; **Return to
+expedition** restores that checkpoint. The optional interaction hand and character
+details are available in the pause menu.
+
+In the 3D editor, choose a room, edit its properties, and choose **Play scene**.
+WASD/right mouse use the same controls; Escape returns to editing without losing
+the selected component or its URL-serialized properties. The Corridor Room now
+has matching floor/wall colliders. The editor and first-person controls are
+intended for desktop keyboard/mouse; a mobile-size screenshot is not a claim of
+touch-first gameplay. Existing texture, mosaic, and room-building tools remain.
+
 ## Canonical Dungeon Generation
 
 `src/dungeon-core` is a UI-free TypeScript compiler from seed/config/templates to

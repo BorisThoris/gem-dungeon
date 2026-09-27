@@ -5,6 +5,7 @@ export const usePhysicalKeyboard = () => {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.target instanceof HTMLElement && event.target.closest("input, textarea, select, [contenteditable=true]")) return;
       setKeys((prev) => ({
         ...prev,
         [event.code]: true,
@@ -18,10 +19,15 @@ export const usePhysicalKeyboard = () => {
       }));
     };
 
+    const clearKeys = () => setKeys({});
+    window.addEventListener("blur", clearKeys);
+    window.addEventListener("game-pause", clearKeys);
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("keyup", handleKeyUp);
 
     return () => {
+      window.removeEventListener("blur", clearKeys);
+      window.removeEventListener("game-pause", clearKeys);
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };

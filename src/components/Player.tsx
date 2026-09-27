@@ -19,6 +19,9 @@ interface PlayerProps {
   showHand?: boolean;
   handGesture?: "idle" | "pointing" | "grabbing" | "waving";
   editorMode?: boolean;
+  paused?: boolean;
+  initialYaw?: number;
+  fallResetY?: number;
 }
 
 export function Player({
@@ -27,11 +30,14 @@ export function Player({
   showHand = true,
   handGesture = "idle",
   editorMode = false,
+  paused = false,
+  initialYaw = 0,
+  fallResetY,
 }: PlayerProps) {
   const ref = useRef<RapierRigidBody>(null);
 
   // Enable mouse look only when not in editor mode
-  useMouseLook(editorMode);
+  useMouseLook(editorMode || paused);
 
   // Use modular hooks
   const { spawnPosition, isSpawned, spawnInfo } = usePlayerSpawn({
@@ -45,6 +51,7 @@ export function Player({
       spawnPosition,
       editorMode,
       showHand,
+      initialYaw,
     });
 
   const { handleMovement } = usePlayerMovement({
@@ -69,13 +76,18 @@ export function Player({
 
   // Main game loop
   useFrame((state, delta) => {
-    if (!isSpawned || !ref.current) return;
+    if (paused || !isSpawned || !ref.current) return;
 
     // Update ref-based game state (no React re-renders)
     refBasedGameState.update();
 
     // Get player position
     const { x, y, z } = ref.current.translation();
+    if (fallResetY !== undefined && y < fallResetY) {
+      ref.current.setTranslation({x: spawnPosition[0],y: spawnPosition[1],z: spawnPosition[2]},true);
+      ref.current.setLinvel({x:0,y:0,z:0},true);
+      return;
+    }
     const playerPosition = new THREE.Vector3(x, y, z);
     playerPositionRef.current = [x, y, z];
 
@@ -94,6 +106,7 @@ export function Player({
     <>
       <RigidBody
         gravityScale={2}
+        ccd
         ref={ref}
         colliders={false}
         mass={50}
@@ -112,7 +125,7 @@ export function Player({
       </RigidBody>
 
       {/* Floating Hand - Mouse Driven */}
-      {handsOut && isSpawned && (
+      {showHand && handsOut && isSpawned && (
         <PlayerHand
           position={[0, 0, 0]} // Position is now handled by mouse following
           rotation={[0, 0, 0]} // Rotation is now handled by mouse following

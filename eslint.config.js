@@ -6,7 +6,12 @@ import tseslint from 'typescript-eslint'
 
 export default [
   {
-    ignores: ['dist/**', 'node_modules/**', '*.config.js', 'scripts/**', 'code_examples/**']
+    // `artifacts/` is gitignored build output and holds a vendored
+    // node_modules tree (ci-node-modules) plus a yarn cache. Flat config does
+    // not read .gitignore, so without this `eslint .` walks into it and fails
+    // on rules those vendored packages reference but this config never defines.
+    // It only shows up on machines that have run CI locally.
+    ignores: ['dist/**', 'node_modules/**', 'artifacts/**', '*.config.js', 'scripts/**', 'code_examples/**']
   },
   {
     files: ['**/*.{ts,tsx}'],

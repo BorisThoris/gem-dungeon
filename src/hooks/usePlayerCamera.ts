@@ -1,3 +1,4 @@
+import { gameEvents, GAME_EVENTS } from "../utils/gameEvents";
 import { useRef, useEffect } from "react";
 import { useThree } from "@react-three/fiber";
 import { Vector3 } from "three";
@@ -7,6 +8,7 @@ interface UsePlayerCameraProps {
   spawnPosition: [number, number, number];
   editorMode: boolean;
   showHand: boolean;
+  initialYaw?: number;
 }
 
 export const usePlayerCamera = ({
@@ -14,6 +16,7 @@ export const usePlayerCamera = ({
   spawnPosition,
   editorMode,
   showHand,
+  initialYaw = 0,
 }: UsePlayerCameraProps) => {
   const { camera } = useThree();
   const cameraPositionRef = useRef(new Vector3());
@@ -27,13 +30,14 @@ export const usePlayerCamera = ({
   useEffect(() => {
     if (isSpawned && spawnPosition && !editorMode) {
       // Set camera position to spawn position with eye level offset
-      camera.position.set(spawnPosition[0], spawnPosition[1] + 1.6, spawnPosition[2]);
+      camera.position.set(spawnPosition[0], spawnPosition[1] + 0.65, spawnPosition[2]);
       
       // Set camera rotation to look forward (reset from editor angle)
-      camera.rotation.set(0, 0, 0);
+      camera.rotation.set(-0.05, initialYaw, 0);
+      gameEvents.emit(GAME_EVENTS.CAMERA_SET_ROTATION, { x: -0.05, y: initialYaw });
       camera.updateMatrixWorld(true);
     }
-  }, [camera, spawnPosition, isSpawned, editorMode]);
+  }, [camera, spawnPosition, isSpawned, editorMode, initialYaw]);
 
   // Update camera position during gameplay
   const updateCameraPosition = (playerPosition: Vector3) => {
@@ -42,7 +46,7 @@ export const usePlayerCamera = ({
     const now = performance.now();
     if (now - lastUpdateTime.current > 16) { // ~60fps max
       // Update camera position
-      cameraPositionRef.current.set(playerPosition.x, playerPosition.y + 1.6, playerPosition.z);
+      cameraPositionRef.current.set(playerPosition.x, playerPosition.y + 0.65, playerPosition.z);
       camera.position.copy(cameraPositionRef.current);
       camera.updateMatrixWorld(true);
 

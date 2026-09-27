@@ -57,7 +57,9 @@ export const useSaveSystem = () => {
     }
   }, []);
 
-  const hasSaveData = useCallback(() => localStorage.getItem(SAVE_KEY) !== null, []);
+  const hasSaveData = useCallback(() => {
+    try { return localStorage.getItem(SAVE_KEY) !== null; } catch { return false; }
+  }, []);
 
   const deleteSave = useCallback(() => {
     try {

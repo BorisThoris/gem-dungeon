@@ -60,9 +60,11 @@ if (only !== 'shots') {
       source: item.source,
       run: async (page) => {
         await settle(page, recipe.setup ?? recipe, { strict: true, log });
-        // The timeline is exercised at speed: the point is that its steps
-        // resolve, not the pacing.
-        await runActions(page, (recipe.timeline ?? []).map((action) => ({ ...action, holdMs: Math.min(action.holdMs ?? 0, 300), ms: Math.min(action.ms ?? 0, 300) })), { strict: false, log });
+        // Physical gameplay can opt into real durations and strict assertions.
+        // Shortening a movement hold would test a different path through the world.
+        const actions = recipe.preserveTiming ? (recipe.timeline ?? [])
+          : (recipe.timeline ?? []).map((action) => ({ ...action, holdMs: Math.min(action.holdMs ?? 0, 300), ms: Math.min(action.ms ?? 0, 300) }));
+        await runActions(page, actions, { strict: recipe.strictActions ?? false, log });
         return assessFrame(await frameStats(page), recipe.quality);
       }
     });
@@ -80,7 +82,7 @@ const chromium = await loadChromium(repoRoot, config).catch((error) => {
 });
 
 let failures = 0;
-const browser = await chromium.launch({ headless: true, args: config.capture?.browserArgs ?? [] });
+const browser = await chromium.launch({ headless: true, channel: config.capture?.browserChannel, args: config.capture?.browserArgs ?? [] });
 try {
   for (const check of checks) {
     const base = await resolveBaseUrl(config, repoRoot, { source: valueOf('--source') ?? check.source, url: valueOf('--url'), log });
