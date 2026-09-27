@@ -11,7 +11,7 @@
     "scripts": {
         "start": "vite",
         "dev": "vite",
-        "build": "vite build",
+        "build": "vite build && node scripts/build-media-delivery.mjs dist",
         "lint": "eslint .",
         "test": "vitest run",
         "test:dungeon": "vitest run src/dungeon-core",
@@ -42,7 +42,7 @@
         "meta:refresh": "node scripts/refresh-project-meta.mjs",
         "trailers": "node scripts/build-project-trailers.mjs",
         "trailers:check": "node scripts/build-project-trailers.mjs --check",
-        "test:media": "node --test scripts/project-media.test.mjs",
+        "test:media": "node --test scripts/project-media.test.mjs scripts/media-delivery.test.mjs",
         "test:media:e2e": "node scripts/project-media.e2e.mjs"
     },
     "dependencies": {
