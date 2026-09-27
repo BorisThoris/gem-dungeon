@@ -3,28 +3,28 @@
   "items": [
     {
       "id": "tour",
-      "title": "Gem Dungeon Editor: rooms, textures and mosaics",
+      "title": "Gem Dungeon: explore, save and playtest",
       "kind": "capture",
-      "inputsHash": "3f9f4c9cd0875dbc91e96e126e1e3972e735f9845fed738b08bf8a7f4a537620",
-      "builtAt": "2026-09-27T14:01:47.393Z",
+      "inputsHash": "7b36d19ce13e8a3dc9e8901e8ce81e480b7c8cc5239c9a5b46e697a49a30d4b2",
+      "builtAt": "2026-09-27T18:10:44.827Z",
       "source": "project-media/.captures/tour.webm",
       "file": "public/trailers/tour.mp4",
       "poster": "public/trailers/tour.jpg",
       "urlPath": "/trailers/tour.mp4",
       "posterUrlPath": "/trailers/tour.jpg",
-      "bytes": 822016,
+      "bytes": 1498323,
       "width": 1280,
       "height": 720,
-      "duration": 24,
+      "duration": 36,
       "fps": 30,
       "orientation": "landscape",
       "music": "project-media/music/tour.m4a",
       "stats": {
-        "mean": 42,
-        "std": 26,
-        "dark": 0.015,
+        "mean": 89,
+        "std": 23,
+        "dark": 0,
         "light": 0,
-        "colours": 44
+        "colours": 30
       }
     }
   ]

@@ -1,49 +1,118 @@
 {
   "slug": "gem-dungeon",
-  "capturedAt": "2026-09-27T14:12:43.951Z",
-  "source": "deployment",
-  "url": "https://gem-dungeon-git.pages.dev/",
+  "capturedAt": "2026-09-27T18:05:38.283Z",
+  "source": "explicit",
+  "url": "http://127.0.0.1:26110/",
   "recipe": {
+    "browserChannel": "chrome",
     "route": "/",
     "actions": [
       {
         "type": "waitFor",
         "target": {
-          "selector": "canvas"
+          "role": "button",
+          "name": "Begin exploring"
         },
         "state": "visible",
-        "timeoutMs": 90000,
-        "label": "wait for the rooms to pre-load"
+        "timeoutMs": 90000
       },
       {
         "type": "click",
         "target": {
           "role": "button",
-          "name": "3D Editor"
+          "name": "Begin exploring"
+        }
+      },
+      {
+        "type": "waitFor",
+        "target": {
+          "selector": "main[data-paused=\"false\"]"
         },
-        "label": "open the 3D editor tab",
-        "optional": true
+        "state": "visible"
       },
       {
         "type": "wait",
-        "ms": 3500,
-        "label": "let the editor scene load",
-        "optional": true
+        "ms": 300
       },
       {
-        "type": "uncheck",
-        "target": {
-          "role": "checkbox",
-          "name": "Show Player State"
+        "type": "key",
+        "key": "w",
+        "holdMs": 3000
+      },
+      {
+        "type": "drag",
+        "button": "right",
+        "from": [
+          0.5,
+          0.5
+        ],
+        "deltaPixels": [
+          -1571,
+          0
+        ],
+        "lockWaitMs": 100,
+        "steps": 1,
+        "label": "hold right mouse and turn through the corridor"
+      },
+      {
+        "type": "key",
+        "key": "w",
+        "holdMs": 3000
+      },
+      {
+        "type": "drag",
+        "button": "right",
+        "from": [
+          0.5,
+          0.5
+        ],
+        "deltaPixels": [
+          -1571,
+          0
+        ],
+        "lockWaitMs": 100,
+        "steps": 1,
+        "label": "hold right mouse and turn through the corridor"
+      },
+      {
+        "type": "key",
+        "key": "w",
+        "until": {
+          "selector": "[data-testid=\"rooms-visited\"]:has-text(\"2\")"
         },
-        "label": "hide the player-state overlay",
-        "optional": true
+        "timeoutMs": 15000
+      },
+      {
+        "type": "waitFor",
+        "target": {
+          "selector": "[data-testid=\"rooms-visited\"]:has-text(\"2\")"
+        },
+        "state": "visible",
+        "timeoutMs": 15000
+      },
+      {
+        "type": "click",
+        "target": {
+          "role": "button",
+          "name": "Map"
+        }
+      },
+      {
+        "type": "waitFor",
+        "target": {
+          "role": "complementary",
+          "name": "Canonical dungeon map"
+        },
+        "state": "visible"
       }
     ],
-    "waitAfterReadyMs": 1500,
+    "waitAfterReadyMs": 350,
     "quality": {
       "minStd": 12
-    }
+    },
+    "browserArgs": [
+      "--disable-dev-shm-usage"
+    ]
   },
   "profiles": [
     {
@@ -51,14 +120,14 @@
       "file": "card.jpg",
       "width": 1600,
       "height": 900,
-      "bytes": 94611,
+      "bytes": 82544,
       "status": "captured",
       "stats": {
-        "mean": 40,
-        "std": 25,
-        "dark": 0.015,
+        "mean": 85,
+        "std": 24,
+        "dark": 0.023,
         "light": 0,
-        "colours": 44
+        "colours": 30
       }
     },
     {
@@ -66,14 +135,14 @@
       "file": "desktop.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 92838,
+      "bytes": 78430,
       "status": "captured",
       "stats": {
-        "mean": 41,
-        "std": 26,
-        "dark": 0.018,
+        "mean": 85,
+        "std": 25,
+        "dark": 0.023,
         "light": 0,
-        "colours": 43
+        "colours": 33
       }
     },
     {
@@ -81,33 +150,29 @@
       "file": "mobile.jpg",
       "width": 430,
       "height": 932,
-      "bytes": 31995,
+      "bytes": 38221,
       "status": "captured",
       "stats": {
-        "mean": 138,
-        "std": 83,
-        "dark": 0.158,
+        "mean": 77,
+        "std": 36,
+        "dark": 0.122,
         "light": 0,
-        "colours": 49
-      },
-      "skipped": [
-        "optional step skipped (open the 3D editor tab): locator.click: Timeout 15000ms exceeded.",
-        "optional step skipped (hide the player-state overlay): locator.uncheck: Timeout 15000ms exceeded."
-      ]
+        "colours": 51
+      }
     },
     {
       "profile": "full",
       "file": "full.jpg",
       "width": 1440,
       "height": 900,
-      "bytes": 80112,
+      "bytes": 66628,
       "status": "captured",
       "stats": {
-        "mean": 41,
-        "std": 26,
-        "dark": 0.018,
+        "mean": 85,
+        "std": 25,
+        "dark": 0.023,
         "light": 0,
-        "colours": 43
+        "colours": 33
       }
     },
     {
@@ -115,14 +180,14 @@
       "file": "og.jpg",
       "width": 1200,
       "height": 630,
-      "bytes": 79371,
+      "bytes": 69612,
       "status": "captured",
       "stats": {
-        "mean": 43,
+        "mean": 79,
         "std": 28,
-        "dark": 0.016,
+        "dark": 0.044,
         "light": 0,
-        "colours": 42
+        "colours": 32
       }
     }
   ]
